@@ -46,13 +46,39 @@ void CSerializer::SerializeSingle(const T &data, std::string &serialized_data) c
 	SerializeSingle<T>(data_bytes, serialized_data);
 }
 
+template <>
+void CSerializer::SerializeSingle<std::string>(const char *data, std::string &serialized_data) const
+{
+	SerializeDynamicArray<char>(data, serialized_data);
+}
+
 template <typename T>
 void CSerializer::SerializeArray(const char *data, size_t count, std::string &serialized_data) const
 {
+	serialized_data.insert(serialized_data.end(), data, data + count * sizeof(T));
+	data += sizeof(T) * count;
+}
+
+template <>
+void CSerializer::SerializeArray<std::string>(const char *data, size_t count, std::string &serialized_data) const
+{
 	for (size_t i = 0; i < count; i++)
 	{
-		SerializeSingle<T>(data, serialized_data);
-		data += sizeof(T);
+		SerializeSingle<std::string>(data, serialized_data);
+		data += sizeof(rosidl_generator_c__char__Sequence);
+	}
+}
+
+template <>
+void CSerializer::SerializeArray<ros_message_t>(const char *data,
+												const rosidl_typesupport_introspection_c__MessageMember *member,
+												std::string &serialized_data) const
+{
+	auto sub_members = GetMembers(member);
+	for (size_t i = 0; i < member->array_size_; i++)
+	{
+		SerializeMessage(data, sub_members, serialized_data);
+		data += sub_members->size_of_;
 	}
 }
 
@@ -67,41 +93,12 @@ void CSerializer::SerializeDynamicArray(const char *data, std::string &serialize
 }
 
 template <>
-void CSerializer::SerializeSingle<std::string>(const char *data, std::string &serialized_data) const
-{
-	SerializeDynamicArray<char>(data, serialized_data);
-}
-
-template <>
-void CSerializer::SerializeArray<std::string>(const char *data, size_t count, std::string &serialized_data) const
-{
-	for (size_t i = 0; i < count; i++)
-	{
-		SerializeSingle<std::string>(data, serialized_data);
-		data += sizeof(rosidl_generator_c__char__Sequence);
-	}
-}
-
-template <>
 void CSerializer::SerializeDynamicArray<std::string>(const char *data, std::string &serialized_data) const
 {
 	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
 
 	SerializeSingle<array_size_t>(sequence->size, serialized_data);
 	SerializeArray<std::string>(reinterpret_cast<const char *>(sequence->data), sequence->size, serialized_data);
-}
-
-template <>
-void CSerializer::SerializeArray<ros_message_t>(const char *data,
-												const rosidl_typesupport_introspection_c__MessageMember *member,
-												std::string &serialized_data) const
-{
-	auto sub_members = GetMembers(member);
-	for (size_t i = 0; i < member->array_size_; i++)
-	{
-		SerializeMessage(data, sub_members, serialized_data);
-		data += sub_members->size_of_;
-	}
 }
 
 template <>

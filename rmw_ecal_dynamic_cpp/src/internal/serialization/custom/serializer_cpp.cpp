@@ -49,6 +49,17 @@ void CppSerializer::SerializeSingle(const T &data, std::string &serialized_data)
 	SerializeSingle<T>(data_bytes, serialized_data);
 }
 
+template <>
+void CppSerializer::SerializeSingle<std::string>(const char *data, std::string &serialized_data) const
+{
+	auto str = reinterpret_cast<const std::string *>(data);
+	auto str_data = str->c_str();
+	auto str_size = str->size();
+
+	SerializeArraySize(*str, serialized_data);
+	SerializeArray<char>(str_data, str_size, serialized_data);
+}
+
 template <typename ARR>
 void CppSerializer::SerializeArraySize(const ARR &array, std::string &serialized_data) const
 {
@@ -59,10 +70,30 @@ void CppSerializer::SerializeArraySize(const ARR &array, std::string &serialized
 template <typename T>
 void CppSerializer::SerializeArray(const char *data, size_t count, std::string &serialized_data) const
 {
+	serialized_data.insert(serialized_data.end(), data, data + count * sizeof(T));
+	data += sizeof(T) * count;
+}
+
+template <>
+void CppSerializer::SerializeArray<std::string>(const char *data, size_t count, std::string &serialized_data) const
+{
 	for (size_t i = 0; i < count; i++)
 	{
-		SerializeSingle<T>(data, serialized_data);
-		data += sizeof(T);
+		SerializeSingle<std::string>(data, serialized_data);
+		data += sizeof(std::string);
+	}
+}
+
+template <>
+void CppSerializer::SerializeArray<ros_message_t>(const char *data,
+												  const ts_introspection::MessageMember *member,
+												  std::string &serialized_data) const
+{
+	auto sub_members = GetMembers(member);
+	for (size_t i = 0; i < member->array_size_; i++)
+	{
+		SerializeMessage(data, sub_members, serialized_data);
+		data += sub_members->size_of_;
 	}
 }
 
@@ -81,17 +112,6 @@ void CppSerializer::SerializeDynamicArray(const char *data, std::string &seriali
 }
 
 template <>
-void CppSerializer::SerializeSingle<std::string>(const char *data, std::string &serialized_data) const
-{
-	auto str = reinterpret_cast<const std::string *>(data);
-	auto str_data = str->c_str();
-	auto str_size = str->size();
-
-	SerializeArraySize(*str, serialized_data);
-	SerializeArray<char>(str_data, str_size, serialized_data);
-}
-
-template <>
 void CppSerializer::SerializeDynamicArray<bool>(const char *data, std::string &serialized_data) const
 {
 	auto &array = *reinterpret_cast<const std::vector<bool> *>(data);
@@ -99,19 +119,6 @@ void CppSerializer::SerializeDynamicArray<bool>(const char *data, std::string &s
 
 	SerializeArraySize(array, serialized_data);
 	serialized_data.insert(serialized_data.end(), array.begin(), array.end());
-}
-
-template <>
-void CppSerializer::SerializeArray<ros_message_t>(const char *data,
-												  const ts_introspection::MessageMember *member,
-												  std::string &serialized_data) const
-{
-	auto sub_members = GetMembers(member);
-	for (size_t i = 0; i < member->array_size_; i++)
-	{
-		SerializeMessage(data, sub_members, serialized_data);
-		data += sub_members->size_of_;
-	}
 }
 
 template <>

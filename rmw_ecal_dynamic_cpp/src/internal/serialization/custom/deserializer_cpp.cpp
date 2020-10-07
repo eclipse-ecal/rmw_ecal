@@ -67,10 +67,30 @@ array_size_t CppDeserializer::DeserializeArraySize(const char **serialized_data)
 template <typename T>
 void CppDeserializer::DeserializeArray(char *member, size_t size, const char **serialized_data)
 {
+	std::copy_n(*serialized_data, sizeof(T) * size, member);
+	*serialized_data += sizeof(T) * size;
+}
+
+template <>
+void CppDeserializer::DeserializeArray<std::string>(char *member, size_t size, const char **serialized_data)
+{
 	for (size_t i = 0; i < size; i++)
 	{
-		DeserializeSingle<T>(member, serialized_data);
-		member += sizeof(T);
+		DeserializeSingle<std::string>(member, serialized_data);
+		member += sizeof(std::string);
+	}
+}
+
+template <>
+void CppDeserializer::DeserializeArray<ros_message_t>(char *message,
+														const ts_introspection::MessageMember *member,
+														const char **serialized_data)
+{
+	auto sub_members = GetMembers(member);
+	for (size_t i = 0; i < member->array_size_; i++)
+	{
+		DeserializeMessage(serialized_data, sub_members, message);
+		message += sub_members->size_of_;
 	}
 }
 
@@ -96,19 +116,6 @@ void CppDeserializer::DeserializeDynamicArray<bool>(char *member, const char **s
 		array->push_back(data[i]);
 	}
 	*serialized_data += arr_size;
-}
-
-template <>
-void CppDeserializer::DeserializeArray<ros_message_t>(char *message,
-														const ts_introspection::MessageMember *member,
-														const char **serialized_data)
-{
-	auto sub_members = GetMembers(member);
-	for (size_t i = 0; i < member->array_size_; i++)
-	{
-		DeserializeMessage(serialized_data, sub_members, message);
-		message += sub_members->size_of_;
-	}
 }
 
 template <>

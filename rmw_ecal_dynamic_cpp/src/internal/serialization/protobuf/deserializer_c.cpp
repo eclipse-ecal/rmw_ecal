@@ -24,8 +24,11 @@
 #include <algorithm>
 #include <memory>
 
-#include <rosidl_typesupport_introspection_c/field_types.h>
 #include <rosidl_generator_c/primitives_sequence.h>
+#include <rosidl_generator_c/primitives_sequence_functions.h>
+#include <rosidl_generator_c/string.h>
+#include <rosidl_generator_c/string_functions.h>
+#include <rosidl_typesupport_introspection_c/field_types.h>
 
 #include "internal/common.hpp"
 #include "internal/serialization/protobuf/helpers.hpp"
@@ -42,50 +45,50 @@ namespace rmw
 
 namespace pb = google::protobuf;
 
-#define DEFINE_SET_METHODS(PB_NAME, TYPE)                                                   \
-template <>                                                                                 \
-void CProtobufDeserializer::SetSingle<TYPE>(char *ros_member,                               \
-											const pb::Message *msg,                         \
-											const pb::FieldDescriptor *field) const         \
-{                                                                                           \
-	auto data = reinterpret_cast<TYPE *>(ros_member);                                       \
-	auto ref = msg->GetReflection();                                                        \
-	*data = ref->Get##PB_NAME(*msg, field);                                                 \
-}                                                                                           \
-																						    \
-template <>                                                                                 \
-void CProtobufDeserializer::SetArray<TYPE>(char *ros_member,                                \
-											int array_size,                                 \
-											const pb::Message *msg,                         \
-											const pb::FieldDescriptor *field) const         \
-{                                                                                           \
-	auto data = reinterpret_cast<TYPE *>(ros_member);                                       \
-	auto ref = msg->GetReflection();                                                        \
-	for (int i = 0; i < array_size; i++, data++)                                            \
-	{                                                                                       \
-		*data = ref->GetRepeated##PB_NAME(*msg, field, i);                                  \
-	}                                                                                       \
-}                                                                                           \
-																						    \
-template <>                                                                                 \
-void CProtobufDeserializer::SetDynamicArray<TYPE>(char *ros_member,                         \
-													const pb::Message *msg,                 \
-													const pb::FieldDescriptor *field) const \
-{                                                                                           \
-	auto sequence = reinterpret_cast<rosidl_generator_c__octet__Sequence *>(ros_member);    \
-	auto ref = msg->GetReflection();                                                        \
-	auto size = ref->FieldSize(*msg, field);                                                \
-																							\
-	sequence->size = size;                                                                  \
-	sequence->capacity = size;                                                              \
-	if(size > 0)																			\
-	{																						\
-		sequence->data = new uint8_t[size * sizeof(TYPE)];     								\
-		SetArray<TYPE>(reinterpret_cast<char *>(sequence->data), 							\
-						sequence->size, msg, field);										\
-	}                                 														\
-																							\
-}
+#define DEFINE_SET_METHODS(PB_NAME, TYPE)                                                     \
+	template <>                                                                               \
+	void CProtobufDeserializer::SetSingle<TYPE>(char *ros_member,                             \
+												const pb::Message *msg,                       \
+												const pb::FieldDescriptor *field) const       \
+	{                                                                                         \
+		auto data = reinterpret_cast<TYPE *>(ros_member);                                     \
+		auto ref = msg->GetReflection();                                                      \
+		*data = ref->Get##PB_NAME(*msg, field);                                               \
+	}                                                                                         \
+                                                                                              \
+	template <>                                                                               \
+	void CProtobufDeserializer::SetArray<TYPE>(char *ros_member,                              \
+											   int array_size,                                \
+											   const pb::Message *msg,                        \
+											   const pb::FieldDescriptor *field) const        \
+	{                                                                                         \
+		auto data = reinterpret_cast<TYPE *>(ros_member);                                     \
+		auto ref = msg->GetReflection();                                                      \
+		for (int i = 0; i < array_size; i++, data++)                                          \
+		{                                                                                     \
+			*data = ref->GetRepeated##PB_NAME(*msg, field, i);                                \
+		}                                                                                     \
+	}                                                                                         \
+                                                                                              \
+	template <>                                                                               \
+	void CProtobufDeserializer::SetDynamicArray<TYPE>(char *ros_member,                       \
+													  const pb::Message *msg,                 \
+													  const pb::FieldDescriptor *field) const \
+	{                                                                                         \
+		auto sequence = reinterpret_cast<rosidl_generator_c__octet__Sequence *>(ros_member);  \
+		auto ref = msg->GetReflection();                                                      \
+		auto size = ref->FieldSize(*msg, field);                                              \
+																							  \
+		sequence->data = nullptr;                                                             \
+		sequence->size = size;                                                                \
+		sequence->capacity = size;                                                            \
+		if (size > 0)                                                                         \
+		{                                                                                     \
+			sequence->data = new uint8_t[size * sizeof(TYPE)];                                \
+			SetArray<TYPE>(reinterpret_cast<char *>(sequence->data),                          \
+						   sequence->size, msg, field);                                       \
+		}                                                                                     \
+	}
 
 DEFINE_SET_METHODS(Bool, bool)
 DEFINE_SET_METHODS(Int32, char)
@@ -105,17 +108,15 @@ void CProtobufDeserializer::SetSingle<std::string>(char *ros_member,
 													const pb::Message *msg,
 													const pb::FieldDescriptor *field) const
 {
-	auto data = reinterpret_cast<rosidl_generator_c__char__Sequence *>(ros_member);
+	auto data = reinterpret_cast<rosidl_generator_c__String *>(ros_member);
 	auto ref = msg->GetReflection();
 
 	const std::string &str = ref->GetStringReference(*msg, field, nullptr);
+	auto str_data = str.c_str();
 	auto size = str.size();
-	data->size = size;
-	data->capacity = size + 1;
-	data->data = new signed char[data->capacity];
-	auto str_data = reinterpret_cast<const signed char *>(str.c_str());
 
-	std::copy_n(str_data, size + 1, data->data);
+	rosidl_generator_c__String__init(data);
+	rosidl_generator_c__String__assignn(data, str_data, size);
 }
 
 template <>
@@ -124,20 +125,19 @@ void CProtobufDeserializer::SetArray<std::string>(char *ros_member,
 													const pb::Message *msg,
 													const pb::FieldDescriptor *field) const
 {
-	auto sequence = reinterpret_cast<rosidl_generator_c__char__Sequence *>(ros_member);
+	auto sequence = reinterpret_cast<rosidl_generator_c__String *>(ros_member);
 	auto ref = msg->GetReflection();
 
 	for (int i = 0; i < array_size; i++)
 	{
-		auto data = reinterpret_cast<rosidl_generator_c__char__Sequence *>(&sequence[i]);
+		auto data = &sequence[i];
+
 		const std::string &str = ref->GetRepeatedStringReference(*msg, field, i, nullptr);
 		auto size = str.size();
-		data->size = size;
-		data->capacity = size + 1;
-		data->data = new signed char[data->capacity];
-		auto str_data = reinterpret_cast<const signed char *>(str.c_str());
+		auto str_data = str.c_str();
 
-		std::copy_n(str_data, size + 1, data->data);
+		rosidl_generator_c__String__init(data);
+		rosidl_generator_c__String__assignn(data, str_data, size);
 	}
 }
 
@@ -146,17 +146,15 @@ void CProtobufDeserializer::SetDynamicArray<std::string>(char *ros_member,
 															const pb::Message *msg,
 															const pb::FieldDescriptor *field) const
 {
-	auto sequence = reinterpret_cast<rosidl_generator_c__octet__Sequence *>(ros_member);
+	auto sequence = reinterpret_cast<rosidl_generator_c__String__Sequence *>(ros_member);
 
 	auto ref = msg->GetReflection();
-	auto array_size = ref->FieldSize(*msg, field);
-	sequence->size = array_size;
-	sequence->capacity = array_size;
-	if(array_size > 0)
+	auto size = ref->FieldSize(*msg, field);
+	rosidl_generator_c__String__Sequence__init(sequence, size);
+	
+	if(size > 0)
 	{
-		auto sequence_data = new char[array_size * sizeof(rosidl_generator_c__char__Sequence)];
-		SetArray<std::string>(sequence_data, array_size, msg, field);
-		sequence->data = reinterpret_cast<uint8_t *>(sequence_data);
+		SetArray<std::string>(reinterpret_cast<char *>(sequence->data), size, msg, field);
 	}
 }
 
@@ -197,8 +195,10 @@ void CProtobufDeserializer::SetDynamicArray<ros_message_t>(char *ros_member,
 
 	auto ref = msg->GetReflection();
 	auto array_size = ref->FieldSize(*msg, field);
+	sequence->data = nullptr;
 	sequence->size = array_size;
 	sequence->capacity = array_size;
+	
 	if(array_size > 0)
 	{
 		auto sequence_data = new char[array_size * members->size_of_];

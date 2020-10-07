@@ -2,6 +2,11 @@
 Changelog for package rmw_ecal_dynamic_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.1 (2020-10-05)
+------------------
+* Performance improvements for messages containing primitive type arrays
+* Bug fixes
+
 0.4.0 (2020-08-13)
 ------------------
 * Subscribers will now receive messages from publishers that are running in same process
