@@ -24,6 +24,9 @@
 #include <stdexcept>
 
 #include <rosidl_generator_c/primitives_sequence.h>
+#include <rosidl_generator_c/primitives_sequence_functions.h>
+#include <rosidl_generator_c/string.h>
+#include <rosidl_generator_c/string_functions.h>
 #include <rosidl_typesupport_introspection_c/field_types.h>
 
 #include "internal/common.hpp"
@@ -40,45 +43,24 @@ void CDeserializer::DeserializeSingle(char *member, const char **serialized_data
 	*serialized_data += sizeof(T);
 }
 
-template <typename T>
-void CDeserializer::DeserializeArray(char *member, size_t size, const char **serialized_data)
-{
-	for (size_t i = 0; i < size; i++)
-	{
-		DeserializeSingle<T>(member, serialized_data);
-		member += sizeof(T);
-	}
-}
-
-template <typename T>
-void CDeserializer::DeserializeDynamicArray(char *member, const char **serialized_data)
-{
-	auto arr_size = *reinterpret_cast<const array_size_t *>(*serialized_data);
-	*serialized_data += sizeof(array_size_t);
-
-	auto sequence = reinterpret_cast<rosidl_generator_c__char__Sequence *>(member);
-	sequence->size = arr_size;
-	sequence->capacity = arr_size;
-	if(arr_size > 0)
-	{
-		sequence->data = new signed char[arr_size * sizeof(T)];
-		DeserializeArray<T>(reinterpret_cast<char *>(sequence->data), sequence->size, serialized_data);
-	}
-}
-
 template <>
 void CDeserializer::DeserializeSingle<std::string>(char *member, const char **serialized_data)
 {
-	auto arr_size = *reinterpret_cast<const array_size_t *>(*serialized_data);
+	auto size = *reinterpret_cast<const array_size_t *>(*serialized_data);
 	*serialized_data += sizeof(array_size_t);
 
-	auto sequence = reinterpret_cast<rosidl_generator_c__char__Sequence *>(member);
-	sequence->size = arr_size;
-	sequence->capacity = arr_size + 1;
-	sequence->data = new signed char[arr_size + 1];
+	auto sequence = reinterpret_cast<rosidl_generator_c__String *>(member);
+	rosidl_generator_c__String__init(sequence);
+	rosidl_generator_c__String__assignn(sequence, *serialized_data, size);
 
-	DeserializeArray<char>(reinterpret_cast<char *>(sequence->data), sequence->size, serialized_data);
-	sequence->data[arr_size] = '\0';
+	*serialized_data += size;
+}
+
+template <typename T>
+void CDeserializer::DeserializeArray(char *member, size_t size, const char **serialized_data)
+{
+	std::copy_n(*serialized_data, sizeof(T) * size, member);
+	*serialized_data += sizeof(T) * size;
 }
 
 template <>
@@ -87,23 +69,7 @@ void CDeserializer::DeserializeArray<std::string>(char *member, size_t size, con
 	for (size_t i = 0; i < size; i++)
 	{
 		DeserializeSingle<std::string>(member, serialized_data);
-		member += sizeof(rosidl_generator_c__char__Sequence);
-	}
-}
-
-template <>
-void CDeserializer::DeserializeDynamicArray<std::string>(char *member, const char **serialized_data)
-{
-	auto arr_size = *reinterpret_cast<const array_size_t *>(*serialized_data);
-	*serialized_data += sizeof(array_size_t);
-
-	auto sequence = reinterpret_cast<rosidl_generator_c__char__Sequence *>(member);
-	sequence->size = arr_size;
-	sequence->capacity = arr_size;
-	if(arr_size > 0)
-	{
-		sequence->data = new signed char[arr_size * sizeof(rosidl_generator_c__char__Sequence)];
-		DeserializeArray<std::string>(reinterpret_cast<char *>(sequence->data), sequence->size, serialized_data);
+		member += sizeof(rosidl_generator_c__String__Sequence);
 	}
 }
 
@@ -120,6 +86,38 @@ void CDeserializer::DeserializeArray<ros_message_t>(char *message,
 	}
 }
 
+template <typename T>
+void CDeserializer::DeserializeDynamicArray(char *member, const char **serialized_data)
+{
+	auto arr_size = *reinterpret_cast<const array_size_t *>(*serialized_data);
+	*serialized_data += sizeof(array_size_t);
+
+	auto sequence = reinterpret_cast<rosidl_generator_c__char__Sequence *>(member);
+	sequence->data = nullptr;
+	sequence->size = arr_size;
+	sequence->capacity = arr_size;
+	if(arr_size > 0)
+	{
+		sequence->data = new signed char[arr_size * sizeof(T)];
+		DeserializeArray<T>(reinterpret_cast<char *>(sequence->data), sequence->size, serialized_data);
+	}
+}
+
+template <>
+void CDeserializer::DeserializeDynamicArray<std::string>(char *member, const char **serialized_data)
+{
+	auto arr_size = *reinterpret_cast<const array_size_t *>(*serialized_data);
+	*serialized_data += sizeof(array_size_t);
+
+	auto sequence = reinterpret_cast<rosidl_generator_c__String__Sequence *>(member);
+	rosidl_generator_c__String__Sequence__init(sequence, arr_size);
+	
+	if(arr_size > 0)
+	{
+		DeserializeArray<std::string>(reinterpret_cast<char *>(sequence->data), sequence->size, serialized_data);
+	}
+}
+
 template <>
 void CDeserializer::DeserializeDynamicArray<ros_message_t>(char *message,
 															const rosidl_typesupport_introspection_c__MessageMember *member,
@@ -129,6 +127,7 @@ void CDeserializer::DeserializeDynamicArray<ros_message_t>(char *message,
 	*serialized_data += sizeof(array_size_t);
 
 	auto sequence = reinterpret_cast<rosidl_generator_c__char__Sequence *>(message);
+	sequence->data = nullptr;
 	sequence->size = arr_size;
 	sequence->capacity = arr_size;
 
