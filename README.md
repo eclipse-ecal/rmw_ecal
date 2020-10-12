@@ -12,7 +12,7 @@ eCAL RMW can offer:
 
 ### Linux
 
-* Install [eCAL](https://github.conti.de/CTZS/ecal)
+* Install [eCAL](https://github.com/continental/ecal)
 * Clone latest release of this repository into your [ROS2 workspace](https://index.ros.org/doc/ros2/Tutorials/Workspace/Creating-A-Workspace/)
 * Source ROS2 `source /path/to/your/ros/distro/folder/setup.bash`
 * Run `colcon build` from your workspace folder
@@ -21,7 +21,7 @@ eCAL RMW can offer:
 
 ### Windows
 
-* Install [eCAL](https://github.conti.de/CTZS/ecal)
+* Install [eCAL](https://github.com/continental/ecal)
 * Clone latest release of this repository into your [ROS2 workspace](https://index.ros.org/doc/ros2/Tutorials/Workspace/Creating-A-Workspace/)
 * Source ROS2 `call C:/path/to/your/ros/distro/folder/setup.bat`
 * Run `colcon build` from your workspace folder
