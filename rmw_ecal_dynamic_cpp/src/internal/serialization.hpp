@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <rosidl_generator_c/message_type_support_struct.h>
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 #include <rosidl_typesupport_introspection_c/message_introspection.h>
 

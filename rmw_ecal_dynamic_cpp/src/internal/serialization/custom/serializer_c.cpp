@@ -22,10 +22,9 @@
 #include <string>
 #include <stdexcept>
 
-#include <rosidl_generator_c/primitives_sequence.h>
-#include <rosidl_typesupport_introspection_c/message_introspection.h>
 #include <rosidl_typesupport_introspection_c/field_types.h>
 
+#include "internal/rosidl_generator_c_pkg_adapter.hpp"
 #include "internal/common.hpp"
 
 namespace eCAL
@@ -65,7 +64,7 @@ void CSerializer::SerializeArray<std::string>(const char *data, size_t count, st
 	for (size_t i = 0; i < count; i++)
 	{
 		SerializeSingle<std::string>(data, serialized_data);
-		data += sizeof(rosidl_generator_c__char__Sequence);
+		data += sizeof(rosidl_runtime_c__char__Sequence);
 	}
 }
 
@@ -85,7 +84,7 @@ void CSerializer::SerializeArray<ros_message_t>(const char *data,
 template <typename T>
 void CSerializer::SerializeDynamicArray(const char *data, std::string &serialized_data) const
 {
-	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 
 	serialized_data.reserve(serialized_data.size() + sequence->size * sizeof(T) + sizeof(array_size_t));
 	SerializeSingle<array_size_t>(sequence->size, serialized_data);
@@ -95,7 +94,7 @@ void CSerializer::SerializeDynamicArray(const char *data, std::string &serialize
 template <>
 void CSerializer::SerializeDynamicArray<std::string>(const char *data, std::string &serialized_data) const
 {
-	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 
 	SerializeSingle<array_size_t>(sequence->size, serialized_data);
 	SerializeArray<std::string>(reinterpret_cast<const char *>(sequence->data), sequence->size, serialized_data);
@@ -106,7 +105,7 @@ void CSerializer::SerializeDynamicArray<ros_message_t>(const char *data,
 													   const rosidl_typesupport_introspection_c__MessageMember *member,
 													   std::string &serialized_data) const
 {
-	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 	auto sequence_data = reinterpret_cast<const char *>(sequence->data);
 	auto sub_members = GetMembers(member);
 

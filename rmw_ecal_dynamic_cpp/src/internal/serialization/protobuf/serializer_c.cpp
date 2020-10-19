@@ -23,9 +23,9 @@
 #include <memory>
 #include <stdexcept>
 
-#include <rosidl_generator_c/primitives_sequence.h>
 #include <rosidl_typesupport_introspection_c/field_types.h>
 
+#include "internal/rosidl_generator_c_pkg_adapter.hpp"
 #include "internal/common.hpp"
 #include "internal/serialization/protobuf/helpers.hpp"
 
@@ -71,7 +71,7 @@ using MessageMembers = rosidl_typesupport_introspection_c__MessageMembers;
 													const pb::FieldDescriptor *field) const \
 	{                                                                                       \
 		auto ref = msg->GetReflection();                                                    \
-		auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data); \
+		auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data); \
                                                                                             \
 		ThrowIfInvalidProtobufArraySize(sequence->size);                                    \
 		for (size_t i = 0; i < sequence->size; i++)                                         \
@@ -99,7 +99,7 @@ void CProtobufSerializer::SetSingle<std::string>(const char *data, pb::Message *
 												 const pb::FieldDescriptor *field) const
 {
 	auto ref = msg->GetReflection();
-	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 	auto str_data = reinterpret_cast<char *>(sequence->data);
 
 	ref->SetString(msg, field, str_data);
@@ -110,7 +110,7 @@ void CProtobufSerializer::SetArray<std::string>(const char *data, int size, pb::
 												const pb::FieldDescriptor *field) const
 {
 	auto ref = msg->GetReflection();
-	auto array = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto array = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 
 	for (int i = 0; i < size; i++)
 	{
@@ -125,15 +125,15 @@ void CProtobufSerializer::SetDynamicArray<std::string>(const char *data, pb::Mes
 													   const pb::FieldDescriptor *field) const
 {
 	auto ref = msg->GetReflection();
-	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 	auto size = sequence->size;
 	auto strings = sequence->data;
 
 	ThrowIfInvalidProtobufArraySize(size);
 
-	for (size_t i = 0; i < size; i++, strings += sizeof(rosidl_generator_c__char__Sequence))
+	for (size_t i = 0; i < size; i++, strings += sizeof(rosidl_runtime_c__char__Sequence))
 	{
-		auto string = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(strings);
+		auto string = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(strings);
 		auto str_data = reinterpret_cast<char *>(string->data);
 
 		ref->AddString(msg, field, str_data);
@@ -175,7 +175,7 @@ template <>
 void CProtobufSerializer::SetDynamicArray<ros_message_t>(const char *data, const MessageMembers *members,
 														 pb::Message *msg, const pb::FieldDescriptor *field) const
 {
-	auto sequence = reinterpret_cast<const rosidl_generator_c__char__Sequence *>(data);
+	auto sequence = reinterpret_cast<const rosidl_runtime_c__char__Sequence *>(data);
 
 	auto arr_data = reinterpret_cast<char *>(sequence->data);
 	auto arr_size = sequence->size;

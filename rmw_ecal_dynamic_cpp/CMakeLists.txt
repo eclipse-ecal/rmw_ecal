@@ -33,10 +33,15 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif()
 
-if(NOT $ENV{ROS_DISTRO} MATCHES "eloquent" AND NOT $ENV{ROS_DISTRO} MATCHES "dashing")
+if(NOT $ENV{ROS_DISTRO} MATCHES "dashing" AND NOT $ENV{ROS_DISTRO} MATCHES "eloquent" AND NOT $ENV{ROS_DISTRO} MATCHES "foxy")
 	message(FATAL_ERROR "'$ENV{ROS_DISTRO}' is unsupported ros2 distro.")
 endif()
-add_compile_definitions($<UPPER_CASE:$ENV{ROS_DISTRO}>)
+
+add_compile_definitions("DASHING=0")
+add_compile_definitions("ELOQUENT=1")
+add_compile_definitions("FOXY=2")
+
+add_compile_definitions("ROS_DISTRO=$<UPPER_CASE:$ENV{ROS_DISTRO}>")
 
 option(USE_PROTOBUF_SERIALIZATION "Use google protobuf as serialization format." OFF)
 if(USE_PROTOBUF_SERIALIZATION)
@@ -69,6 +74,7 @@ add_library(${PROJECT_NAME} SHARED
 	src/get_node_info_and_types.cpp
 	src/get_service_names_and_types.cpp
 	src/get_topic_names_and_types.cpp
+	src/get_topic_endpoint_info.cpp
 	src/init_options.cpp
 	src/init.cpp
 	src/rmw.cpp

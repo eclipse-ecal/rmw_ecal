@@ -20,6 +20,7 @@
 #pragma once
 
 #include <limits>
+#include <stdexcept>
 
 #include <ecal/ecal.h>
 
