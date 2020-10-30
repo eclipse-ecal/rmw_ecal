@@ -44,15 +44,16 @@ jobs:
       - name: install sudo
         run: apt update && apt install sudo
       - name: download eCAL
-        uses: dsaltares/fetch-gh-release-asset@master
-        with:
-          repo: "continental/ecal"
-          version: "latest"
-          file: "ecal-${{ matrix.os_release }}.deb"
-      - name: install eCAL dependencies
-        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-100 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
+        run: |
+          curl -s https://api.github.com/repos/continental/ecal/releases/latest
+          grep "ecal-.*-${{ matrix.os_release }}.deb"
+          cut -d '"' -f 4
+          wget -qi -
+      - name: install eCAL bionic dependencies
+        if: ${{ matrix.os_release }} == 'bionic'
+        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-103 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
       - name: install eCAL deb
-        run: 'sudo dpkg -i ecal-${{ matrix.os_release }}.deb'
+        run: 'sudo dpkg -i ecal-*.deb'
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
