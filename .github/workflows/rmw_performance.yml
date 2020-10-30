@@ -1,9 +1,8 @@
-name: ROS2 CI
+name: RMW Performance testing
 
 on:
-  pull_request:
+  push:
     branches:
-      - 'devel'
       - 'master'
 
 jobs:
