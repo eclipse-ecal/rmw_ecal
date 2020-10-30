@@ -49,8 +49,11 @@ jobs:
           | grep "ecal-.*-${{ matrix.os_release }}.deb" \
           | cut -d '"' -f 4)
       - name: install eCAL bionic dependencies
-        if: ${{ matrix.os_release }} == 'bionic'
-        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-103 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
+        if: matrix.os_release == 'bionic'
+        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-100 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
+      - name: install eCAL focal dependencies
+        if: matrix.os_release == 'focal'
+        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-103 libprotobuf17 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
       - name: install eCAL deb
         run: 'sudo dpkg -i ecal.deb'
       - name: setup directories
