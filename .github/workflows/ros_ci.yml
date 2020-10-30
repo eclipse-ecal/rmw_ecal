@@ -42,7 +42,7 @@ jobs:
       image: '${{ matrix.os }}:${{ matrix.os_release }}'
     steps:
       - name: install prereqs
-        run: apt update && apt install -y sudo curl
+        run: apt update && apt install -y sudo curl wget
       - name: download eCAL
         run: |
           curl -s https://api.github.com/repos/continental/ecal/releases/latest \
