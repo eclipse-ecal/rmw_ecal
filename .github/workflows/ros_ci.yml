@@ -41,8 +41,8 @@ jobs:
     container:
       image: '${{ matrix.os }}:${{ matrix.os_release }}'
     steps:
-      - name: install sudo
-        run: apt update && apt install sudo curl
+      - name: install prereqs
+        run: apt update && apt install -y sudo curl
       - name: download eCAL
         run: |
           curl -s https://api.github.com/repos/continental/ecal/releases/latest
