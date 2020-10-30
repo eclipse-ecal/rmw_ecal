@@ -46,7 +46,7 @@ jobs:
         with:
           repo: "continental/ecal"
           version: "latest"
-          file: "ecal-*-//${{ matrix.os_release }}.deb"
+          file: "ecal-*-${{ matrix.os_release }}.deb"
       - name: ls
         run: ls
       - name: setup directories
