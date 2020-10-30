@@ -42,7 +42,7 @@ jobs:
       image: '${{ matrix.os }}://${{ matrix.os_release }}'
     steps:
       - name: download eCAL
-        uses: dsaltares/fetch-h-release-asset@master
+        uses: dsaltares/fetch-gh-release-asset@master
         with:
           repo: "continental/ecal"
           version: "latest"
