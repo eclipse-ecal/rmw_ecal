@@ -37,11 +37,11 @@ rmw_ret_t rmw_publisher_event_init(rmw_event_t *rmw_event,
 	RMW_CHECK_ARGUMENT_FOR_NULL(rmw_event, RMW_RET_INVALID_ARGUMENT);
 	RMW_CHECK_ARGUMENT_FOR_NULL(publisher, RMW_RET_INVALID_ARGUMENT);
 	CHECK_RMW_IMPLEMENTATION(publisher);
-
+	
 	if (event_type != rmw_event_type_t::RMW_EVENT_OFFERED_DEADLINE_MISSED)
 	{
 		RMW_SET_ERROR_MSG("Unsupported publisher event type.");
-		return RMW_RET_INVALID_ARGUMENT;
+		return RMW_RET_UNSUPPORTED;
 	}
 
 	rmw_event->event_type = event_type;
@@ -62,7 +62,7 @@ rmw_ret_t rmw_subscription_event_init(rmw_event_t *rmw_event,
 	if (event_type != rmw_event_type_t::RMW_EVENT_REQUESTED_DEADLINE_MISSED)
 	{
 		RMW_SET_ERROR_MSG("Unsupported publisher event type.");
-		return RMW_RET_INVALID_ARGUMENT;
+		return RMW_RET_UNSUPPORTED;
 	}
 
 	rmw_event->event_type = event_type;

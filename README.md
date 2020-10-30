@@ -52,3 +52,4 @@ RMW can currently work with only one serialization method at the time.
 
 * Dashing Diademata
 * Eloquent Elusor
+* Foxy Fitzroy

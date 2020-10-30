@@ -23,9 +23,8 @@
 
 #include <rosidl_typesupport_introspection_c/identifier.h>
 #include <rosidl_typesupport_introspection_cpp/identifier.hpp>
-#include <rosidl_generator_c/service_type_support_struct.h>
-#include <rosidl_generator_c/message_type_support_struct.h>
 
+#include "internal/rosidl_generator_c_pkg_adapter.hpp"
 #include "internal/typesupport/message_typesupport_c.hpp"
 #include "internal/typesupport/message_typesupport_cpp.hpp"
 #include "internal/typesupport/service_typesupport_c.hpp"

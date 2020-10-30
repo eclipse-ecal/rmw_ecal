@@ -2,6 +2,10 @@
 Changelog for package rmw_ecal_dynamic_cpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.0 (2020-10-19)
+------------------
+* Added support for Foxy Fitzroy
+
 0.4.1 (2020-10-05)
 ------------------
 * Performance improvements for messages containing primitive type arrays
