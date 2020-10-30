@@ -19,24 +19,36 @@ jobs:
           - rolling
         include:
           # Dashing Diademata (May 2019 - May 2021)
-          - docker_image: ubuntu:bionic
+          - os: ubuntu
+            os_release: bionic
             ros_distribution: dashing
             ros_version: 2
           # Eloquent Elusor (November 2019 - November 2020)
-          - docker_image: ubuntu:bionic
+          - os: ubuntu
+            os_release: bionic
             ros_distribution: eloquent
             ros_version: 2
           # Foxy Fitzroy (June 2020 - May 2023)
-          - docker_image: ubuntu:focal
+          - os: ubuntu
+            os_release: focal
             ros_distribution: foxy
             ros_version: 2
           # Rolling Ridley  (June 2020 - Present)
-          - docker_image: ubuntu:focal
+          - os: ubuntu
+            os_release: focal
             ros_distribution: rolling
             ros_version: 2
     container:
-      image: ${{ matrix.docker_image }}
+      image: '${{ matrix.os }}://${{ matrix.os_release }}'
     steps:
+      - name: download eCAL
+        uses: dsaltares/fetch-h-release-asset@master
+        with:
+          repo: "continental/ecal"
+          version: "latest"
+          file: "ecal-*-//${{ matrix.os_release }}.deb"
+      - name: ls
+        run: ls
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
