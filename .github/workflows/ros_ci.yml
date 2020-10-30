@@ -46,9 +46,11 @@ jobs:
         with:
           repo: "continental/ecal"
           version: "latest"
-          file: "ecal-*-${{ matrix.os_release }}.deb"
-      - name: ls
-        run: ls
+          file: "ecal-${{ matrix.os_release }}.deb"
+      - name: install eCAL dependencies
+        run: 'sudo apt install libc6 libcurl4 libgcc1 libhdf5-100 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
+      - name: install eCAL deb
+        run: 'sudo dpkg -i ecal-${{ matrix.os_release }}.deb'
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
