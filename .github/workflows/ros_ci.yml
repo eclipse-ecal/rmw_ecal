@@ -45,15 +45,14 @@ jobs:
         run: apt update && apt install -y sudo curl wget
       - name: download eCAL
         run: |
-          curl -s https://api.github.com/repos/continental/ecal/releases/latest \
+          curl -L -o ecal.deb $(curl -s https://api.github.com/repos/continental/ecal/releases/latest \
           | grep "ecal-.*-${{ matrix.os_release }}.deb" \
-          | cut -d '"' -f 4 \
-          | wget -qi -
+          | cut -d '"' -f 4)
       - name: install eCAL bionic dependencies
         if: ${{ matrix.os_release }} == 'bionic'
         run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-103 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
       - name: install eCAL deb
-        run: 'sudo dpkg -i ecal-*.deb'
+        run: 'sudo dpkg -i ecal.deb'
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
