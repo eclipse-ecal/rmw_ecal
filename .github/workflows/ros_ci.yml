@@ -41,6 +41,8 @@ jobs:
     container:
       image: '${{ matrix.os }}:${{ matrix.os_release }}'
     steps:
+      - name: install sudo
+        run: apt update && apt install sudo
       - name: download eCAL
         uses: dsaltares/fetch-gh-release-asset@master
         with:
