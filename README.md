@@ -5,8 +5,10 @@ ROS2 middleware based on eCAL.
 eCAL RMW can offer:
 
 * High performance (shared memory is used for inter-process communication and udp multicast for inter-host communication)
-* Support for eCAL ecosystem powerful tools like eCAL recorder, eCAL player, eCAL monitor, which can be used to record, replay and monitor RMW layer
-* Communication between ROS2 nodes and eCAL tasks without need for a gateway
+* All eCAL ecosystem tools to
+  * monitor all ros publisher / subscriber / services using the [eCAL Monitor](https://continental.github.io/ecal/getting_started/monitor.html)
+  * record all ROS messages decentralized into HDF5 without extra network load using the [eCAL Recorder](https://continental.github.io/ecal/getting_started/recorder.html)
+  * replay ROS messages using the [eCAL Player](https://continental.github.io/ecal/getting_started/player.html) utility
 
 ## Build instructions
 
