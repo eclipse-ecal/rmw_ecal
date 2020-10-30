@@ -39,7 +39,7 @@ jobs:
             ros_distribution: rolling
             ros_version: 2
     container:
-      image: '${{ matrix.os }}://${{ matrix.os_release }}'
+      image: '${{ matrix.os }}:${{ matrix.os_release }}'
     steps:
       - name: download eCAL
         uses: dsaltares/fetch-gh-release-asset@master
