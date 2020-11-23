@@ -46,7 +46,7 @@ jobs:
       - name: download eCAL
         run: |
           curl -L -o ecal.deb $(curl -s https://api.github.com/repos/continental/ecal/releases/latest \
-          | grep "ecal-.*-${{ matrix.os_release }}.deb" \
+          | grep "${{ matrix.os_release }}_amd64.deb" \
           | tr -d '\n' | tr -d '\r' \
           | cut -d'"' -f8)
       - name: install eCAL bionic dependencies

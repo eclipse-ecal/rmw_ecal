@@ -57,6 +57,7 @@ find_package(ament_cmake REQUIRED)
 
 find_package(eCAL REQUIRED)
 find_package(Protobuf REQUIRED)
+include_directories(${Protobuf_INCLUDE_DIRS})
 
 create_targets_protobuf()
 
