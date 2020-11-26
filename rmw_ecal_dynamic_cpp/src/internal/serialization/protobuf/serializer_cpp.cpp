@@ -205,7 +205,7 @@ namespace eCAL
           Set<bool>(member_data, member, msg, desc);
           break;
         case ts_introspection::ROS_TYPE_BYTE:
-          Set<uint8_t>(member_data, member, msg, desc);
+          Set<uint8_t>(member_data, member, msg, desc); //-V1037
           break;
         case ts_introspection::ROS_TYPE_CHAR:
           Set<char>(member_data, member, msg, desc);

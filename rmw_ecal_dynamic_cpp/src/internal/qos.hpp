@@ -83,7 +83,7 @@ namespace eCAL
       case RMW_QOS_POLICY_HISTORY_KEEP_LAST:
         return eCAL::QOS::eQOSPolicy_HistoryKind::keep_last_history_qos;
       case RMW_QOS_POLICY_HISTORY_KEEP_ALL:
-        return eCAL::QOS::eQOSPolicy_HistoryKind::keep_last_history_qos;
+        return eCAL::QOS::eQOSPolicy_HistoryKind::keep_all_history_qos;
       default:
         throw std::invalid_argument{ "Invalid history policy value." };
       }

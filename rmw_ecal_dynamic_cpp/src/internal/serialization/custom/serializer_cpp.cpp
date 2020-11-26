@@ -71,6 +71,8 @@ namespace eCAL
     void CppSerializer::SerializeArray(const char* data, size_t count, std::string& serialized_data) const
     {
       serialized_data.insert(serialized_data.end(), data, data + count * sizeof(T));
+      // TODO: PVS issue V1001 (https://www.viva64.com/en/w/v1001/print/)
+      // what is this line supposed to do ?
       data += sizeof(T) * count;
     }
 
@@ -203,7 +205,7 @@ namespace eCAL
           Serialize<bool>(member_data, *member, serialized_data);
           break;
         case ts_introspection::ROS_TYPE_BYTE:
-          Serialize<uint8_t>(member_data, *member, serialized_data);
+          Serialize<uint8_t>(member_data, *member, serialized_data); //-V1037
           break;
         case ts_introspection::ROS_TYPE_CHAR:
           Serialize<char>(member_data, *member, serialized_data);

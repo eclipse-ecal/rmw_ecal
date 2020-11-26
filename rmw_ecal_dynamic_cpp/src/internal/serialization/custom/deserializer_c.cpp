@@ -57,7 +57,7 @@ namespace eCAL
     template <typename T>
     void CDeserializer::DeserializeArray(char* member, size_t size, const char** serialized_data)
     {
-      std::copy_n(*serialized_data, sizeof(T) * size, member);
+      std::copy_n(*serialized_data, sizeof(T) * size, member); //-V575
       *serialized_data += sizeof(T) * size;
     }
 
@@ -202,7 +202,7 @@ namespace eCAL
           Deserialize<bool>(member_data, member, serialized_data);
           break;
         case ::rosidl_typesupport_introspection_c__ROS_TYPE_BYTE:
-          Deserialize<uint8_t>(member_data, member, serialized_data);
+          Deserialize<uint8_t>(member_data, member, serialized_data); //-V1037
           break;
         case ::rosidl_typesupport_introspection_c__ROS_TYPE_CHAR:
           Deserialize<char>(member_data, member, serialized_data);

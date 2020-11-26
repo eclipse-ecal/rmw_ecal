@@ -278,7 +278,7 @@ namespace eCAL
           Set<bool>(member_data, member, msg, field);
           break;
         case rosidl_typesupport_introspection_c__ROS_TYPE_BYTE:
-          Set<uint8_t>(member_data, member, msg, field);
+          Set<uint8_t>(member_data, member, msg, field); //-V1037
           break;
         case rosidl_typesupport_introspection_c__ROS_TYPE_CHAR:
           Set<char>(member_data, member, msg, field);

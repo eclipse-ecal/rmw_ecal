@@ -45,6 +45,9 @@ namespace eCAL
 
       public:
         iterator(pointer start) : current_{ start } {}
+        // TODO: PVS issue V690 (https://www.viva64.com/en/w/v690/print/)
+        // should be .. ?
+        // iterator(const iterator& rhs) = { current_ = rhs.current_; }
         iterator(const iterator&) = default;
         ~iterator() = default;
 
