@@ -24,7 +24,14 @@
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 
 #include "internal/serialization/deserializer.hpp"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#endif
 #include "internal/serialization/protobuf/message_factory.hpp"
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 namespace eCAL
 {
