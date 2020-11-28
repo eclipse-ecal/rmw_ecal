@@ -37,7 +37,14 @@
 #include <limits>
 #include <stdexcept>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#endif
 #include <google/protobuf/descriptor.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 namespace eCAL
 {

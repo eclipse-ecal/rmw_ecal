@@ -29,8 +29,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-	add_compile_options(/W4)
-	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+  add_compile_options(/W4)
+  add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+
+  # CMake >= 3.15 will erroneously define PROTOBUF_USE_DLLS otherwise
+  set (Protobuf_USE_STATIC_LIBS TRUE) 
 endif()
 
 set(SUPPORTED_DISTROS
@@ -77,45 +80,45 @@ if(BUILD_TESTING)
 endif()
 
 include_directories(
-	${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src
 )
 
 add_library(${PROJECT_NAME} SHARED
-	src/event.cpp
-	src/get_node_info_and_types.cpp
-	src/get_service_names_and_types.cpp
-	src/get_topic_names_and_types.cpp
-	src/get_topic_endpoint_info.cpp
-	src/init_options.cpp
-	src/init.cpp
-	src/rmw.cpp
-	src/internal/serialization/custom/serializer_cpp.cpp
-	src/internal/serialization/custom/serializer_c.cpp
-	src/internal/serialization/custom/deserializer_cpp.cpp
-	src/internal/serialization/custom/deserializer_c.cpp
-	src/internal/serialization/protobuf/serializer_cpp.cpp
-	src/internal/serialization/protobuf/serializer_c.cpp
-	src/internal/serialization/protobuf/deserializer_cpp.cpp
-	src/internal/serialization/protobuf/deserializer_c.cpp
+  src/event.cpp
+  src/get_node_info_and_types.cpp
+  src/get_service_names_and_types.cpp
+  src/get_topic_names_and_types.cpp
+  src/get_topic_endpoint_info.cpp
+  src/init_options.cpp
+  src/init.cpp
+  src/rmw.cpp
+  src/internal/serialization/custom/serializer_cpp.cpp
+  src/internal/serialization/custom/serializer_c.cpp
+  src/internal/serialization/custom/deserializer_cpp.cpp
+  src/internal/serialization/custom/deserializer_c.cpp
+  src/internal/serialization/protobuf/serializer_cpp.cpp
+  src/internal/serialization/protobuf/serializer_c.cpp
+  src/internal/serialization/protobuf/deserializer_cpp.cpp
+  src/internal/serialization/protobuf/deserializer_c.cpp
 )
 
 set(proto_files
-	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/subscriber.proto
-	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/publisher.proto
-	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/client.proto
-	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/service.proto
+  ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/subscriber.proto
+  ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/publisher.proto
+  ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/client.proto
+  ${CMAKE_CURRENT_SOURCE_DIR}/protobuf/service.proto
 )
 
 PROTOBUF_TARGET_CPP(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/protobuf ${proto_files})
 
 target_link_libraries(${PROJECT_NAME} 
-	eCAL::core 
-	eCAL::pb
+  eCAL::core 
+  eCAL::pb
 )
 
 ament_target_dependencies(${PROJECT_NAME} 
-	rmw 
-	rosidl_typesupport_introspection_cpp
+  rmw 
+  rosidl_typesupport_introspection_cpp
 )
 
 configure_rmw_library(${PROJECT_NAME})
@@ -123,15 +126,15 @@ configure_rmw_library(${PROJECT_NAME})
 ament_export_libraries(${PROJECT_NAME})
 
 install(
-	TARGETS ${PROJECT_NAME}
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
-	RUNTIME DESTINATION bin
+  TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
 
 register_rmw_implementation(
-	"c:rosidl_typesupport_c:rosidl_typesupport_introspection_c"
-	"cpp:rosidl_typesupport_cpp:rosidl_typesupport_introspection_cpp"
+  "c:rosidl_typesupport_c:rosidl_typesupport_introspection_c"
+  "cpp:rosidl_typesupport_cpp:rosidl_typesupport_introspection_cpp"
 )
 
 ament_package()

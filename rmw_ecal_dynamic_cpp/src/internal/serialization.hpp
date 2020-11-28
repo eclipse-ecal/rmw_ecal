@@ -19,9 +19,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,94 +48,94 @@
 
 namespace eCAL
 {
-namespace rmw
-{
+  namespace rmw
+  {
 
-static constexpr auto serialization_format =
+    static constexpr auto serialization_format =
 #ifdef USE_PROTOBUF_SERIALIZATION
-	"protobuf";
+      "protobuf";
 #else
-	"custom";
+      "custom";
 #endif
 
-static const std::string serialization_typename_prefix =
+    static const std::string serialization_typename_prefix =
 #ifdef USE_PROTOBUF_SERIALIZATION
-	"proto:";
+      "proto:";
 #else
-	"";
+      "";
 #endif
 
-inline Serializer *CreateSerializer(const rosidl_typesupport_introspection_cpp::MessageMembers *members)
-{
+    inline Serializer* CreateSerializer(const rosidl_typesupport_introspection_cpp::MessageMembers* members)
+    {
 #ifdef USE_PROTOBUF_SERIALIZATION
-	return new CppProtobufSerializer(members);
+      return new CppProtobufSerializer(members);
 #else
-	return new CppSerializer(members);
+      return new CppSerializer(members);
 #endif
-}
+    }
 
-inline Serializer *CreateSerializer(const rosidl_typesupport_introspection_c__MessageMembers *members)
-{
+    inline Serializer* CreateSerializer(const rosidl_typesupport_introspection_c__MessageMembers* members)
+    {
 #ifdef USE_PROTOBUF_SERIALIZATION
-	return new CProtobufSerializer(members);
+      return new CProtobufSerializer(members);
 #else
-	return new CSerializer(members);
+      return new CSerializer(members);
 #endif
-}
+    }
 
-inline Deserializer *CreateDeserializer(const rosidl_typesupport_introspection_cpp::MessageMembers *members)
-{
+    inline Deserializer* CreateDeserializer(const rosidl_typesupport_introspection_cpp::MessageMembers* members)
+    {
 #ifdef USE_PROTOBUF_SERIALIZATION 
-	return new CppProtobufDeserializer(members);
+      return new CppProtobufDeserializer(members);
 #else
-	return new CppDeserializer(members);
+      return new CppDeserializer(members);
 #endif
-}
+    }
 
-inline Deserializer *CreateDeserializer(const rosidl_typesupport_introspection_c__MessageMembers *members)
-{
+    inline Deserializer* CreateDeserializer(const rosidl_typesupport_introspection_c__MessageMembers* members)
+    {
 #ifdef USE_PROTOBUF_SERIALIZATION
-	return new CProtobufDeserializer(members);
+      return new CProtobufDeserializer(members);
 #else
-	return new CDeserializer(members);
+      return new CDeserializer(members);
 #endif
-}
+    }
 
-inline Serializer *CreateSerializer(const rosidl_message_type_support_t *type_support)
-{
-	auto ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_cpp::typesupport_identifier);
-	if (ts != nullptr)
-	{
-		auto members = GetCppMembers(ts);
-		return CreateSerializer(members);
-	}
+    inline Serializer* CreateSerializer(const rosidl_message_type_support_t* type_support)
+    {
+      auto ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_cpp::typesupport_identifier);
+      if (ts != nullptr)
+      {
+        auto members = GetCppMembers(ts);
+        return CreateSerializer(members);
+      }
 
-	ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_c__identifier);
-	if (ts != nullptr)
-	{
-		auto members = GetCMembers(ts);
-		return CreateSerializer(members);
-	}
-	throw std::runtime_error("Unsupported type support.");
-}
+      ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_c__identifier);
+      if (ts != nullptr)
+      {
+        auto members = GetCMembers(ts);
+        return CreateSerializer(members);
+      }
+      throw std::runtime_error("Unsupported type support.");
+    }
 
-inline Deserializer *CreateDeserializer(const rosidl_message_type_support_t *type_support)
-{
-	auto ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_cpp::typesupport_identifier);
-	if (ts != nullptr)
-	{
-		auto members = GetCppMembers(ts);
-		return CreateDeserializer(members);
-	}
+    inline Deserializer* CreateDeserializer(const rosidl_message_type_support_t* type_support)
+    {
+      auto ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_cpp::typesupport_identifier);
+      if (ts != nullptr)
+      {
+        auto members = GetCppMembers(ts);
+        return CreateDeserializer(members);
+      }
 
-	ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_c__identifier);
-	if (ts != nullptr)
-	{
-		auto members = GetCMembers(ts);
-		return CreateDeserializer(members);
-	}
-	throw std::runtime_error("Unsupported type support.");
-}
+      ts = get_message_typesupport_handle(type_support, rosidl_typesupport_introspection_c__identifier);
+      if (ts != nullptr)
+      {
+        auto members = GetCMembers(ts);
+        return CreateDeserializer(members);
+      }
+      throw std::runtime_error("Unsupported type support.");
+    }
 
-} // namespace rmw
+  } // namespace rmw
 } // namespace eCAL
