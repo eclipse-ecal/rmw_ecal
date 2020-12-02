@@ -46,7 +46,7 @@ set(SUPPORTED_DISTROS
 list(FIND SUPPORTED_DISTROS $ENV{ROS_DISTRO} index)
 
 if(index EQUAL -1)
-	message(FATAL_ERROR "'$ENV{ROS_DISTRO}' is an unsupported ros2 distro.")
+  message(FATAL_ERROR "'$ENV{ROS_DISTRO}' is an unsupported ros2 distro.")
 endif()
 
 add_definitions("-DROLLING=0")
@@ -58,7 +58,7 @@ add_definitions("-DROS_DISTRO=$<UPPER_CASE:$ENV{ROS_DISTRO}>")
 
 option(USE_PROTOBUF_SERIALIZATION "Use google protobuf as serialization format." OFF)
 if(USE_PROTOBUF_SERIALIZATION)
-	add_definitions(-DUSE_PROTOBUF_SERIALIZATION)
+  add_definitions(-DUSE_PROTOBUF_SERIALIZATION)
 endif()
 
 find_package(rmw REQUIRED)
@@ -83,7 +83,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/src
 )
 
-add_library(${PROJECT_NAME} SHARED
+set(rwm_ecal_cpp
   src/event.cpp
   src/get_node_info_and_types.cpp
   src/get_service_names_and_types.cpp
@@ -92,14 +92,28 @@ add_library(${PROJECT_NAME} SHARED
   src/init_options.cpp
   src/init.cpp
   src/rmw.cpp
+)
+
+set(rwm_ecal_internal_serialization_custom_cpp
   src/internal/serialization/custom/serializer_cpp.cpp
   src/internal/serialization/custom/serializer_c.cpp
   src/internal/serialization/custom/deserializer_cpp.cpp
   src/internal/serialization/custom/deserializer_c.cpp
-  src/internal/serialization/protobuf/serializer_cpp.cpp
-  src/internal/serialization/protobuf/serializer_c.cpp
-  src/internal/serialization/protobuf/deserializer_cpp.cpp
-  src/internal/serialization/protobuf/deserializer_c.cpp
+)
+
+if(USE_PROTOBUF_SERIALIZATION)
+  set(rwm_ecal_internal_serialization_protobuf_cpp
+    src/internal/serialization/protobuf/serializer_cpp.cpp
+    src/internal/serialization/protobuf/serializer_c.cpp
+    src/internal/serialization/protobuf/deserializer_cpp.cpp
+    src/internal/serialization/protobuf/deserializer_c.cpp
+  )
+endif()
+
+add_library(${PROJECT_NAME} SHARED
+  ${rwm_ecal_cpp}
+  ${rwm_ecal_internal_serialization_custom_cpp}
+  ${rwm_ecal_internal_serialization_protobuf_cpp}
 )
 
 set(proto_files
@@ -130,6 +144,12 @@ install(
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+)
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "Source Files" FILES 
+  ${rwm_ecal_cpp}
+  ${rwm_ecal_internal_serialization_custom_cpp}
+  ${rwm_ecal_internal_serialization_protobuf_cpp}
 )
 
 register_rmw_implementation(
