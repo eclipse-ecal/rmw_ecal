@@ -61,11 +61,7 @@ namespace eCAL
 
       virtual const std::string GetMessageName() const override
       {
-#ifdef USE_PROTOBUF_SERIALIZATION
-        return GetMessageSimpleName();
-#else
         return GetMessageNamespace() + "/" + GetMessageSimpleName();
-#endif
       }
 
       virtual size_t GetTypeSize() const override
