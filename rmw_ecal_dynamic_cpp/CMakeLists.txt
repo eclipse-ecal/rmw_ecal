@@ -16,7 +16,7 @@
 #
 # ========================= RMW eCAL LICENSE =================================
 
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 
 project(rmw_ecal_dynamic_cpp)
 
@@ -36,19 +36,29 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   set (Protobuf_USE_STATIC_LIBS TRUE) 
 endif()
 
-if(NOT $ENV{ROS_DISTRO} MATCHES "dashing" AND NOT $ENV{ROS_DISTRO} MATCHES "eloquent" AND NOT $ENV{ROS_DISTRO} MATCHES "foxy")
-  message(FATAL_ERROR "'$ENV{ROS_DISTRO}' is unsupported ros2 distro.")
+set(SUPPORTED_DISTROS
+	rolling
+	dashing
+	eloquent
+	foxy
+)
+
+list(FIND SUPPORTED_DISTROS $ENV{ROS_DISTRO} index)
+
+if(index EQUAL -1)
+	message(FATAL_ERROR "'$ENV{ROS_DISTRO}' is an unsupported ros2 distro.")
 endif()
 
-add_compile_definitions("DASHING=0")
-add_compile_definitions("ELOQUENT=1")
-add_compile_definitions("FOXY=2")
+add_definitions("-DROLLING=0")
+add_definitions("-DDASHING=1")
+add_definitions("-DELOQUENT=2")
+add_definitions("-DFOXY=3")
 
-add_compile_definitions("ROS_DISTRO=$<UPPER_CASE:$ENV{ROS_DISTRO}>")
+add_definitions("-DROS_DISTRO=$<UPPER_CASE:$ENV{ROS_DISTRO}>")
 
 option(USE_PROTOBUF_SERIALIZATION "Use google protobuf as serialization format." OFF)
 if(USE_PROTOBUF_SERIALIZATION)
-  add_compile_definitions(USE_PROTOBUF_SERIALIZATION)
+	add_definitions(-DUSE_PROTOBUF_SERIALIZATION)
 endif()
 
 find_package(rmw REQUIRED)

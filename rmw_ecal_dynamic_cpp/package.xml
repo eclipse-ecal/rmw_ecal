@@ -9,8 +9,9 @@
 
  	<build_depend>rmw</build_depend>
 	<build_depend>rcutils</build_depend>
-	<build_depend>Protobuf</build_depend>
-	
+	<build_depend>protobuf</build_depend>
+        <build_depend>protobuf-dev</build_depend>
+
 	<depend>rmw_implementation_cmake</depend>
 
 	<test_depend>ament_lint_auto</test_depend>

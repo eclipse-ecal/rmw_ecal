@@ -51,12 +51,10 @@ jobs:
           | cut -d'"' -f8)
       - name: install eCAL bionic dependencies
         if: matrix.os_release == 'bionic'
-        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-100 libprotobuf10 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
+        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-100 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
       - name: install eCAL focal dependencies
         if: matrix.os_release == 'focal'
-        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-103 libprotobuf17 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
-      - name: install eCAL deb
-        run: 'sudo dpkg -i ecal.deb'
+        run: 'sudo apt install -y libc6 libcurl4 libgcc1 libhdf5-103 libqt5core5a libqt5gui5 libqt5widgets5 libstdc++6'
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
@@ -64,12 +62,16 @@ jobs:
         with:
           path: ros_ws/src
       - name: setup ROS environment
-        uses: flynneva/setup-ros@enable_ros2_testing
+        uses: ros-tooling/setup-ros@0.0.26
         with:
-          use-ros2-testing: true
+          use-ros2-testing: false
           required-ros-distributions: ${{ matrix.ros_distribution }}
+      - name: rosdep install
+        run: "rosdep update && rosdep install -r --from-paths ros_ws/src --ignore-src --rosdistro ${{ matrix.ros_distribution }} -y"
+      - name: install eCAL deb
+        run: 'sudo dpkg -i ecal.deb'
       - name: build and test
-        uses: ros-tooling/action-ros-ci@0.0.19
+        uses: ros-tooling/action-ros-ci@0.1.0
         with:
           package-name: rmw_ecal_dynamic_cpp
           target-ros2-distro: ${{ matrix.ros_distribution }}
