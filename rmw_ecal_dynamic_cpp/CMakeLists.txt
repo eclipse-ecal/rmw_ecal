@@ -56,11 +56,6 @@ add_definitions("-DFOXY=3")
 
 add_definitions("-DROS_DISTRO=$<UPPER_CASE:$ENV{ROS_DISTRO}>")
 
-option(USE_PROTOBUF_SERIALIZATION "Use google protobuf as serialization format." OFF)
-if(USE_PROTOBUF_SERIALIZATION)
-  add_definitions(-DUSE_PROTOBUF_SERIALIZATION)
-endif()
-
 find_package(rmw REQUIRED)
 find_package(rosidl_generator_c REQUIRED)
 find_package(rosidl_typesupport_introspection_c REQUIRED)
@@ -101,19 +96,9 @@ set(rwm_ecal_internal_serialization_custom_cpp
   src/internal/serialization/custom/deserializer_c.cpp
 )
 
-if(USE_PROTOBUF_SERIALIZATION)
-  set(rwm_ecal_internal_serialization_protobuf_cpp
-    src/internal/serialization/protobuf/serializer_cpp.cpp
-    src/internal/serialization/protobuf/serializer_c.cpp
-    src/internal/serialization/protobuf/deserializer_cpp.cpp
-    src/internal/serialization/protobuf/deserializer_c.cpp
-  )
-endif()
-
 add_library(${PROJECT_NAME} SHARED
   ${rwm_ecal_cpp}
   ${rwm_ecal_internal_serialization_custom_cpp}
-  ${rwm_ecal_internal_serialization_protobuf_cpp}
 )
 
 set(proto_files
@@ -149,7 +134,6 @@ install(
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "Source Files" FILES 
   ${rwm_ecal_cpp}
   ${rwm_ecal_internal_serialization_custom_cpp}
-  ${rwm_ecal_internal_serialization_protobuf_cpp}
 )
 
 register_rmw_implementation(

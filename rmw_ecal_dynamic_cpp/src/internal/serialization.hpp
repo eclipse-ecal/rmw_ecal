@@ -22,64 +22,35 @@
 #include "internal/serialization/custom/deserializer_cpp.hpp"
 #include "internal/serialization/custom/deserializer_c.hpp"
 
-#include "internal/serialization/protobuf/serializer_cpp.hpp"
-#include "internal/serialization/protobuf/serializer_c.hpp"
-#include "internal/serialization/protobuf/deserializer_cpp.hpp"
-#include "internal/serialization/protobuf/deserializer_c.hpp"
-
 namespace eCAL
 {
   namespace rmw
   {
 
     static constexpr auto serialization_format =
-#ifdef USE_PROTOBUF_SERIALIZATION
-      "protobuf";
-#else
       "custom";
-#endif
 
     static const std::string serialization_typename_prefix =
-#ifdef USE_PROTOBUF_SERIALIZATION
-      "proto:";
-#else
       "";
-#endif
 
     inline Serializer* CreateSerializer(const rosidl_typesupport_introspection_cpp::MessageMembers* members)
     {
-#ifdef USE_PROTOBUF_SERIALIZATION
-      return new CppProtobufSerializer(members);
-#else
       return new CppSerializer(members);
-#endif
     }
 
     inline Serializer* CreateSerializer(const rosidl_typesupport_introspection_c__MessageMembers* members)
     {
-#ifdef USE_PROTOBUF_SERIALIZATION
-      return new CProtobufSerializer(members);
-#else
       return new CSerializer(members);
-#endif
     }
 
     inline Deserializer* CreateDeserializer(const rosidl_typesupport_introspection_cpp::MessageMembers* members)
     {
-#ifdef USE_PROTOBUF_SERIALIZATION 
-      return new CppProtobufDeserializer(members);
-#else
       return new CppDeserializer(members);
-#endif
     }
 
     inline Deserializer* CreateDeserializer(const rosidl_typesupport_introspection_c__MessageMembers* members)
     {
-#ifdef USE_PROTOBUF_SERIALIZATION
-      return new CProtobufDeserializer(members);
-#else
       return new CDeserializer(members);
-#endif
     }
 
     inline Serializer* CreateSerializer(const rosidl_message_type_support_t* type_support)
