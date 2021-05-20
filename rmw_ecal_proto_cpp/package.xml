@@ -1,15 +1,20 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-	<name>rmw_ecal_dynamic_cpp</name>
+	<name>rmw_ecal_proto_cpp</name>
 	<version>0.6.0</version>
-	<description>RMW implementation based on eCAL.</description>
+	<description>RMW implementation based on eCAL and Protobuf.</description>
 	<maintainer email="aleksandar.brakmic@continental-corporation.com">Aleksandar Brakmić</maintainer>
 	<license>Apache License 2.0</license>
 
  	<build_depend>rmw</build_depend>
 	<build_depend>rcutils</build_depend>
 
+  <build_depend>protobuf-dev</build_depend>
+	<build_depend>rosidl_typesupport_protobuf</build_depend>
+	<build_depend>rosidl_typesupport_protobuf_c</build_depend>
+	<build_depend>rosidl_typesupport_protobuf_cpp</build_depend>
+	
 	<depend>rmw_ecal_shared_cpp</depend>
 	<depend>rmw_implementation_cmake</depend>
 

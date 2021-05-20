@@ -18,7 +18,7 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-project(rmw_ecal_dynamic_cpp)
+project(rmw_ecal_proto_cpp)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
@@ -29,22 +29,28 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  add_compile_options(/W4)
-  add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+	add_compile_options(/W4)
+	add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+  # CMake >= 3.15 will erroneously define PROTOBUF_USE_DLLS otherwise
+  set (Protobuf_USE_STATIC_LIBS TRUE)
 endif()
+
+find_package(ament_cmake REQUIRED)
+
+find_package(Protobuf REQUIRED)
+find_package(eCAL REQUIRED)
 
 find_package(rmw REQUIRED)
 find_package(rmw_ecal_shared_cpp REQUIRED)
 find_package(rosidl_generator_c REQUIRED)
 find_package(rosidl_typesupport_introspection_c REQUIRED)
 find_package(rosidl_typesupport_introspection_cpp REQUIRED)
-
-find_package(ament_cmake REQUIRED)
-
-find_package(eCAL REQUIRED)
+find_package(rosidl_typesupport_protobuf REQUIRED)
+find_package(rosidl_typesupport_protobuf_c REQUIRED)
+find_package(rosidl_typesupport_protobuf_cpp REQUIRED)
 
 include_directories(
-  src
+	${PROJECT_SOURCE_DIR}/src
 )
 
 add_library(${PROJECT_NAME} SHARED
@@ -56,11 +62,25 @@ add_library(${PROJECT_NAME} SHARED
 	src/rmw/init_options.cpp
 	src/rmw/init.cpp
 	src/rmw/rmw.cpp
-	src/serialization/serializer_cpp.cpp
-	src/serialization/serializer_c.cpp
-	src/serialization/deserializer_cpp.cpp
-	src/serialization/deserializer_c.cpp
 )
+
+target_link_libraries(${PROJECT_NAME} 
+	eCAL::core eCAL::pb
+)
+
+ament_target_dependencies(${PROJECT_NAME} 
+	rmw
+	rmw_ecal_shared_cpp
+	rosidl_generator_c
+	rosidl_typesupport_protobuf
+	rosidl_typesupport_protobuf_c
+	rosidl_typesupport_protobuf_cpp
+)
+
+configure_rmw_library(${PROJECT_NAME})
+
+ament_export_include_directories(include)
+ament_export_libraries(${PROJECT_NAME})
 
 ament_export_dependencies(rmw)
 ament_export_dependencies(rmw_ecal_shared_cpp)
@@ -71,30 +91,16 @@ ament_export_dependencies(rosidl_typesupport_protobuf)
 ament_export_dependencies(rosidl_typesupport_protobuf_c)
 ament_export_dependencies(rosidl_typesupport_protobuf_cpp)
 
-ament_target_dependencies(${PROJECT_NAME} 
-	rmw 
-	rmw_ecal_shared_cpp
-	rosidl_typesupport_introspection_cpp
+install(
+	TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}
+	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib
+	RUNTIME DESTINATION bin
 )
-
-target_link_libraries(${PROJECT_NAME} 
-	eCAL::core
-)
-
-configure_rmw_library(${PROJECT_NAME})
 
 register_rmw_implementation(
-	"c:rosidl_typesupport_c:rosidl_typesupport_introspection_c"
-	"cpp:rosidl_typesupport_cpp:rosidl_typesupport_introspection_cpp"
-)
-
-ament_export_libraries(${PROJECT_NAME})
-
-install(
-  TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+	"c:rosidl_typesupport_c:rosidl_typesupport_protobuf_c"
+	"cpp:rosidl_typesupport_cpp:rosidl_typesupport_protobuf_cpp"
 )
 
 ament_package()
