@@ -60,7 +60,7 @@ Cons:
 * 
 ### rmw_ecal_proto_cpp
 rmw_ecal_proto_cpp uses protobuf based static typesupport.  
-To use this implementation setup [rosidl_typesupport_protobuf](https://github.geo.conti.de/ecal/rosidl_typesupport_protobuf) and set variable RMW_IMPLEMENTATION to "rmw_ecal_proto_cpp".  
+To use this implementation setup [rosidl_typesupport_protobuf](https://github.com/continental/rosidl_typesupport_protobuf) and set variable RMW_IMPLEMENTATION to "rmw_ecal_proto_cpp".  
 
 Run all nodes using rmw_ecal_proto_cpp
 ```bash
@@ -78,7 +78,7 @@ Pros:
 
 Cons:
 * A bit slower than rmw_ecal_dynamic_cpp
-* Not plug&play, requires [rosidl_typesupport_protobuf](https://github.geo.conti.de/ecal/rosidl_typesupport_protobuf) to be built and sourced to work
+* Not plug&play, requires [rosidl_typesupport_protobuf](https://github.com/continental/rosidl_typesupport_protobuf) to be built and sourced to work
 
 ## Currently supported ROS2 distributions
 
