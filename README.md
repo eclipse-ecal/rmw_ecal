@@ -10,8 +10,6 @@ eCAL RMW can offer:
 
 ## Build instructions
 
-### Linux
-
 * Install [eCAL](https://continental.github.io/ecal/getting_started/setup.html)
 * Clone latest release of this repository into your [ROS2 workspace](https://index.ros.org/doc/ros2/Tutorials/Workspace/Creating-A-Workspace/)
 * Source ROS2
@@ -57,7 +55,7 @@ Pros:
   
 Cons:
 * Doesn't integrate well into eCAL ecosystem (monitor will only show binary data for messages and native eCAL nodes won't be able to deserialize its data)
-* 
+ 
 ### rmw_ecal_proto_cpp
 rmw_ecal_proto_cpp uses protobuf based static typesupport.  
 To use this implementation setup [rosidl_typesupport_protobuf](https://github.com/continental/rosidl_typesupport_protobuf) and set variable RMW_IMPLEMENTATION to "rmw_ecal_proto_cpp".  
