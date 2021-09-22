@@ -153,7 +153,6 @@ class Client
 
 	void PopLastRequest()
 	{
-		eCAL::Logging::Log("PopLastRequest");
 		std::lock_guard<std::mutex> queue_lock(request_queue_mutex_);
 		requests_.pop();
 	}
