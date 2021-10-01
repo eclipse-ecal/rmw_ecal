@@ -32,7 +32,14 @@ const char *rmw_get_serialization_format(void)
   return serialization_format;
 }
 
-#if ROS_DISTRO >= FOXY
+#if ROS_DISTRO >= GALACTIC
+rmw_node_t *rmw_create_node(rmw_context_t *context,
+                            const char *name,
+                            const char *namespace_)
+{
+  return eCAL::rmw::rmw_create_node(::rmw_get_implementation_identifier(), context, name, namespace_);
+}
+#elif ROS_DISTRO == FOXY
 rmw_node_t *rmw_create_node(rmw_context_t *context,
                             const char *name,
                             const char *namespace_,

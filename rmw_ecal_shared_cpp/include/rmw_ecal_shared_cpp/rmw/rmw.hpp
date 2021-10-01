@@ -23,7 +23,12 @@ namespace eCAL
   namespace rmw
   {
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
-#if ROS_DISTRO >= FOXY
+#if ROS_DISTRO >= GALACTIC
+    rmw_node_t *rmw_create_node(const char *implementation_identifier,
+                                rmw_context_t *context,
+                                const char *name,
+                                const char *namespace_);
+#elif ROS_DISTRO == FOXY
     rmw_node_t *rmw_create_node(const char *implementation_identifier,
                                 rmw_context_t *context,
                                 const char *name,

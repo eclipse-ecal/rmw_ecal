@@ -49,12 +49,14 @@ include_directories(
 
 add_library(${PROJECT_NAME} SHARED
 	src/rmw/event.cpp
+	src/rmw/get_network_flow_endpoints.cpp
 	src/rmw/get_node_info_and_types.cpp
 	src/rmw/get_service_names_and_types.cpp
 	src/rmw/get_topic_names_and_types.cpp
 	src/rmw/get_topic_endpoint_info.cpp
 	src/rmw/init_options.cpp
 	src/rmw/init.cpp
+	src/rmw/qos_profiles.cpp
 	src/rmw/rmw.cpp
 	src/serialization/serializer_cpp.cpp
 	src/serialization/serializer_c.cpp
