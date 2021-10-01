@@ -36,7 +36,6 @@ namespace eCAL
 
       if (event_type != rmw_event_type_t::RMW_EVENT_OFFERED_DEADLINE_MISSED)
       {
-        RMW_SET_ERROR_MSG("Unsupported publisher event type.");
         return RMW_RET_UNSUPPORTED;
       }
 
@@ -58,7 +57,6 @@ namespace eCAL
 
       if (event_type != rmw_event_type_t::RMW_EVENT_REQUESTED_DEADLINE_MISSED)
       {
-        RMW_SET_ERROR_MSG("Unsupported publisher event type.");
         return RMW_RET_UNSUPPORTED;
       }
 
