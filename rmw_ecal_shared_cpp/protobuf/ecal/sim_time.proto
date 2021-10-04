@@ -19,7 +19,7 @@
 
 syntax = "proto3";
 
-package eCAL.pb;
+package eCAL.rmw.pb;
 
 message SimTime
 {

@@ -25,14 +25,6 @@
 #include <rmw/impl/cpp/macros.hpp>
 
 #include <ecal/ecal.h>
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4127 4146 4800)
-#endif
-// #include <ecal/pb/monitoring.pb.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #include <rmw_ecal_shared_cpp/ros_array_iterator.hpp>
 
