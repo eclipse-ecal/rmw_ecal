@@ -19,7 +19,7 @@
 
 syntax = "proto3";
 
-package eCAL;
+package eCAL.rmw.pb;
 
 enum eProcessSeverity                                     // process severity
 {

@@ -23,7 +23,7 @@
 #pragma warning(push)
 #pragma warning(disable : 4127 4146 4800)
 #endif
-#include <ecal/pb/monitoring.pb.h>
+#include "ecal/monitoring.pb.h"
 #include "subscriber.pb.h"
 #include "publisher.pb.h"
 #include "service.pb.h"
@@ -82,9 +82,9 @@ namespace eCAL
 			namespace
 			{
 
-				inline eCAL::pb::Monitoring GetMonitoringSnapshot()
+				inline eCAL::rmw::pb::Monitoring GetMonitoringSnapshot()
 				{
-					eCAL::pb::Monitoring monitoring;
+					eCAL::rmw::pb::Monitoring monitoring;
 					std::string monitoring_data;
 					eCAL::Monitoring::GetMonitoring(monitoring_data);
 					monitoring.ParseFromString(monitoring_data);

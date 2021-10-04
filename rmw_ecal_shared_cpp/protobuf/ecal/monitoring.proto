@@ -24,7 +24,7 @@ import "ecal/process.proto";
 import "ecal/service.proto";
 import "ecal/topic.proto";
 
-package eCAL;
+package eCAL.rmw.pb;
 
 message LogMessage                                // eCAL monitoring log message
 {
