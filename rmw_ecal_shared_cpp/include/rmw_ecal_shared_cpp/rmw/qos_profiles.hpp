@@ -23,6 +23,7 @@ namespace eCAL
 {
   namespace rmw
   {
+    RMW_PROTOBUF_SHARED_CPP_PUBLIC
     rmw_ret_t rmw_qos_profile_check_compatible(const rmw_qos_profile_t publisher_profile,
                                                const rmw_qos_profile_t subscription_profile,
                                                rmw_qos_compatibility_type_t *compatibility,
