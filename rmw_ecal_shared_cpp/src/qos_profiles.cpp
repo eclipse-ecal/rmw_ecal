@@ -16,6 +16,7 @@
 #if ROS_DISTRO >= GALACTIC
 
 #include <rmw/qos_profiles.h>
+#include <rmw_ecal_shared_cpp/rmw/qos_profiles.hpp>
 
 #include <rmw_ecal_shared_cpp/visibility.h>
 
