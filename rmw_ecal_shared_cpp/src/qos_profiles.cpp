@@ -16,9 +16,9 @@
 #if ROS_DISTRO >= GALACTIC
 
 #include <rmw/qos_profiles.h>
-#include <rmw_ecal_shared_cpp/rmw/qos_profiles.hpp>
 
 #include <rmw_ecal_shared_cpp/visibility.h>
+#include <rmw_ecal_shared_cpp/rmw/qos_profiles.hpp>
 
 #include "internal/common.hpp"
 
@@ -34,13 +34,13 @@ namespace eCAL
     {
       *compatibility = RMW_QOS_COMPATIBILITY_OK;
 
-      if(publisher_profile.avoid_ros_namespace_conventions != subscription_profile.avoid_ros_namespace_conventions)
+      if (publisher_profile.avoid_ros_namespace_conventions != subscription_profile.avoid_ros_namespace_conventions)
       {
-	std::string ns_conventions_error{"avoid_ros_namespace_conventions must be same"};
-        if(reason_size >= ns_conventions_error.size())
-	{
-	  std::strcpy(reason, ns_conventions_error.c_str());
-	}
+        std::string ns_conventions_error{ "avoid_ros_namespace_conventions must be same" };
+        if (reason_size >= ns_conventions_error.size())
+        {
+          std::strcpy(reason, ns_conventions_error.c_str());
+        }
         *compatibility = RMW_QOS_COMPATIBILITY_ERROR;
       }
       return RMW_RET_OK;
