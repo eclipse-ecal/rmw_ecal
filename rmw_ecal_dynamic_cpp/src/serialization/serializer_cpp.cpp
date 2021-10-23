@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <cstring>
 
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 #include <rosidl_typesupport_introspection_cpp/field_types.hpp>
@@ -25,12 +26,102 @@
 
 #include "common.hpp"
 
+
+#include <ecal/ecal.h>
+
 namespace eCAL
 {
   namespace rmw
   {
 
     namespace ts_introspection = rosidl_typesupport_introspection_cpp;
+
+    bool IsMemcopyable(const ts_introspection::MessageMembers *members)
+    {
+      auto struct_size = members->size_of_;
+      size_t actual_data_size = 0;
+
+      for (uint32_t i = 0; i < members->member_count_; i++)
+      {
+        const auto member = members->members_ + i;
+
+	//Detect if there was padding before this memeber
+	if(member->offset_ != actual_data_size)
+	{
+	  return false;
+	}
+        if (member->is_array_)
+        {
+          if (!(member->array_size_ > 0 && !member->is_upper_bound_))
+          {
+            return false;
+          }
+        }
+        switch (member->type_id_)
+        {
+        case ts_introspection::ROS_TYPE_STRING:
+          return false;
+        case ts_introspection::ROS_TYPE_BOOLEAN:
+          actual_data_size += sizeof(bool);
+          break;
+        case ts_introspection::ROS_TYPE_BYTE:
+          actual_data_size += sizeof(uint8_t);
+          break;
+        case ts_introspection::ROS_TYPE_CHAR:
+          actual_data_size += sizeof(char);
+          break;
+        case ts_introspection::ROS_TYPE_FLOAT:
+          actual_data_size += sizeof(float);
+          break;
+        case ts_introspection::ROS_TYPE_DOUBLE:
+          actual_data_size += sizeof(double);
+          break;
+        case ts_introspection::ROS_TYPE_LONG_DOUBLE:
+          actual_data_size += sizeof(long double);
+          break;
+        case ts_introspection::ROS_TYPE_INT8:
+          actual_data_size += sizeof(int8_t);
+          break;
+        case ts_introspection::ROS_TYPE_INT16:
+          actual_data_size += sizeof(int16_t);
+          break;
+        case ts_introspection::ROS_TYPE_INT32:
+          actual_data_size += sizeof(int32_t);
+          break;
+        case ts_introspection::ROS_TYPE_INT64:
+          actual_data_size += sizeof(int64_t);
+          break;
+        case ts_introspection::ROS_TYPE_UINT8:
+          actual_data_size += sizeof(uint8_t);
+          break;
+        case ts_introspection::ROS_TYPE_UINT16:
+          actual_data_size += sizeof(uint16_t);
+          break;
+        case ts_introspection::ROS_TYPE_UINT32:
+          actual_data_size += sizeof(uint32_t);
+          break;
+        case ts_introspection::ROS_TYPE_UINT64:
+          actual_data_size += sizeof(uint64_t);
+	  break;
+        case ts_introspection::ROS_TYPE_MESSAGE:
+	  {
+            auto msg_memebers = GetMembers(member);
+	    if(IsMemcopyable(msg_memebers))
+	    {
+              actual_data_size += msg_memebers->size_of_;
+	    }
+	    else return false;
+	  }
+          break;
+          //not documented
+        case ts_introspection::ROS_TYPE_WSTRING:
+        case ts_introspection::ROS_TYPE_WCHAR:
+          throw std::logic_error("Wide character/string serialization is unsupported.");
+	}
+      }
+     // eCAL::Logging::Log(std::to_string(actual_data_size) + " " + std::to_string(struct_size));
+     return actual_data_size == struct_size;
+    }
 
     template <typename T>
     void CppSerializer::SerializeSingle(const char *data, std::string &serialized_data) const
@@ -129,12 +220,32 @@ namespace eCAL
       auto sub_members = GetMembers(member);
       auto vec_data = vector->data();
       array_size_t size = vector->size() / sub_members->size_of_;
+      auto is_mem_copyable = IsMemcopyable(sub_members);
 
       SerializeSingle(size, serialized_data);
-      for (size_t i = 0; i < size; i++)
+
+      if(is_mem_copyable)
       {
-        SerializeMessage(vec_data, sub_members, serialized_data);
-        vec_data += sub_members->size_of_;
+	// serialized_data.reserve(serialized_data.size() + vector->size());
+	// std::copy(vector->begin(), vector->end(), std::back_inserter(serialized_data));
+	//
+        // serialized_data.append(vector->begin(), vector->end());
+	//
+	auto old_size = serialized_data.size();
+	serialized_data.resize(serialized_data.size() + vector->size());
+	std::memcpy(&serialized_data[old_size], vector->data(), vector->size());
+        //
+	// auto old_size = serialized_data.size();
+	// serialized_data.resize(serialized_data.size() + vector->size());
+	// std::copy(vector->data(), vector->data() + vector->size(), &serialized_data[old_size]);
+      }
+      else
+      {
+        for (size_t i = 0; i < size; i++)
+        {
+          SerializeMessage(vec_data, sub_members, serialized_data);
+          vec_data += sub_members->size_of_;
+        }
       }
     }
 
