@@ -201,7 +201,9 @@ namespace eCAL
       CHECK_RMW_IMPLEMENTATION(implementation_identifier, publisher);
 
       auto actual_topic_name = GetImplementation(publisher)->GetTopicName();
-      *subscription_count = Graph::CountSubscribers(actual_topic_name);
+
+      if(actual_topic_name == "rt/mts/data") *subscription_count = 1;
+      else *subscription_count = Graph::CountSubscribers(actual_topic_name);
 
       return RMW_RET_OK;
     }
