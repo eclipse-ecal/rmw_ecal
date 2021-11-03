@@ -151,6 +151,11 @@ namespace eCAL
         return !data_.empty();
       }
 
+      size_t CountPublishers() const
+      {
+        return subscriber_.GetPublisherCount();
+      }
+
       std::string GetTopicName() const
       {
         return subscriber_.GetTopicName();
