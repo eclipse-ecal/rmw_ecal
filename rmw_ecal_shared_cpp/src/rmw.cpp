@@ -200,8 +200,7 @@ namespace eCAL
       RMW_CHECK_ARGUMENT_FOR_NULL(subscription_count, RMW_RET_INVALID_ARGUMENT);
       CHECK_RMW_IMPLEMENTATION(implementation_identifier, publisher);
 
-      auto actual_topic_name = GetImplementation(publisher)->GetTopicName();
-      *subscription_count = Graph::CountSubscribers(actual_topic_name);
+      *subscription_count = GetImplementation(publisher)->CountSubscribers();
 
       return RMW_RET_OK;
     }
@@ -351,8 +350,7 @@ namespace eCAL
       RMW_CHECK_ARGUMENT_FOR_NULL(publisher_count, RMW_RET_INVALID_ARGUMENT);
       CHECK_RMW_IMPLEMENTATION(implementation_identifier, subscription);
 
-      auto actual_topic_name = GetImplementation(subscription)->GetTopicName();
-      *publisher_count = Graph::CountPublishers(actual_topic_name);
+      *publisher_count = GetImplementation(subscription)->CountPublishers();
 
       return RMW_RET_OK;
     }

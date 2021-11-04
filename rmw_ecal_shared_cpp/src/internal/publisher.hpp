@@ -68,6 +68,11 @@ namespace eCAL
         publisher_.Send(data, data_size);
       }
 
+      size_t CountSubscribers() const
+      {
+        return publisher_.GetSubscriberCount();
+      }
+
       const rmw_qos_profile_t &GetRosQOSProfile() const
       {
         return ros_qos_profile_;
