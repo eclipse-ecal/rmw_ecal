@@ -15,6 +15,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 
@@ -64,10 +65,7 @@ namespace eCAL
                             std::string &serialized_data) const;
 
     public:
-      explicit CppSerializer(const rosidl_typesupport_introspection_cpp::MessageMembers *members)
-          : members_(members)
-      {
-      }
+      explicit CppSerializer(const rosidl_typesupport_introspection_cpp::MessageMembers *members);
 
       virtual const std::string Serialize(const void *data) override;
       virtual const std::string GetMessageStringDescriptor() const override;
