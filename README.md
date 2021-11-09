@@ -83,3 +83,4 @@ Cons:
 * Dashing Diademata
 * Eloquent Elusor
 * Foxy Fitzroy
+* Galactic Geochelone
