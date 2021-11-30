@@ -56,10 +56,7 @@ namespace eCAL
                               char *message);
 
     public:
-      explicit CDeserializer(const rosidl_typesupport_introspection_c__MessageMembers *members)
-          : members_(members)
-      {
-      }
+      CDeserializer(const rosidl_typesupport_introspection_c__MessageMembers *members);
 
       virtual void Deserialize(void *message, const void *serialized_data, size_t size) override;
     };

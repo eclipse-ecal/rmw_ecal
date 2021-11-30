@@ -24,7 +24,7 @@
 
 #include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
 
-#include "additional_type_info.hpp"
+#include "type_info.hpp"
 #include "common.hpp"
 
 namespace eCAL
@@ -100,7 +100,6 @@ namespace eCAL
 	auto old_size = serialized_data.size();
 	serialized_data.resize(serialized_data.size() + data_size);
 	std::memcpy(&serialized_data[old_size], data, data_size);
-	data += data_size;
       }
       else
       {
@@ -150,7 +149,7 @@ namespace eCAL
       if(TypeInfo::IsMemcopyable(sub_members))
       {
 	auto old_size = serialized_data.size();
-	serialized_data.resize(serialized_data.size() + vector->size());
+	serialized_data.resize(old_size + vector->size());
 	std::memcpy(&serialized_data[old_size], vector->data(), vector->size());
       }
       else
@@ -213,12 +212,12 @@ namespace eCAL
                                          const ts_introspection::MessageMembers *members,
                                          std::string &serialized_data) const
     {
-      if (TypeInfo::IsMemcopyable(members_))
+      if (TypeInfo::IsMemcopyable(members))
       {
         auto data_size = members->size_of_;
-        serialized_data.resize(serialized_data.size() + data_size);
-        std::memcpy(&serialized_data[serialized_data.size()], data, data_size);
-	data += data_size;
+	auto old_size = serialized_data.size();
+        serialized_data.resize(old_size + data_size);
+        std::memcpy(&serialized_data[old_size], data, data_size);
         return;
       }
 
