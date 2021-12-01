@@ -32,7 +32,9 @@ namespace eCAL
       RMW_CHECK_ARGUMENT_FOR_NULL(options, RMW_RET_INVALID_ARGUMENT);
       RMW_CHECK_ARGUMENT_FOR_NULL(context, RMW_RET_INVALID_ARGUMENT);
 
-      int status = eCAL::Initialize(0, nullptr, nullptr, eCAL::Init::Default | eCAL::Init::Monitoring);
+      std::array<char *, 2> args = { const_cast<char*>("ecal-set-config-key"), const_cast<char*>("\"common/registration_refresh:10\"") };
+
+      int status = eCAL::Initialize(args.size(), args.data(), nullptr, eCAL::Init::Default | eCAL::Init::Monitoring);
       if (status == -1)
         return RMW_RET_ERROR;
 
@@ -40,7 +42,7 @@ namespace eCAL
       eCAL::Process::SetState(eCAL_Process_eSeverity::proc_sev_healthy,
                               eCAL_Process_eSeverity_Level::proc_sev_level1,
                               "Initializing");
-      eCAL::Process::SleepMS(1000);
+      eCAL::Process::SleepMS(10);
       eCAL::Process::SetState(eCAL_Process_eSeverity::proc_sev_healthy,
                               eCAL_Process_eSeverity_Level::proc_sev_level1,
                               "Running");
