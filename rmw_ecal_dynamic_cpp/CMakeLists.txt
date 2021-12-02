@@ -69,9 +69,6 @@ ament_export_dependencies(rmw_ecal_shared_cpp)
 ament_export_dependencies(rosidl_generator_c)
 ament_export_dependencies(rosidl_typesupport_introspection_c)
 ament_export_dependencies(rosidl_typesupport_introspection_cpp)
-ament_export_dependencies(rosidl_typesupport_protobuf)
-ament_export_dependencies(rosidl_typesupport_protobuf_c)
-ament_export_dependencies(rosidl_typesupport_protobuf_cpp)
 
 ament_target_dependencies(${PROJECT_NAME} 
 	rmw 
