@@ -152,9 +152,10 @@ namespace eCAL
 			{
 				auto monitoring = GetMonitoringSnapshot();
 				auto &topics = monitoring.topics();
+				auto full_topic_name = pub_name_prefix + topic_name;
 
-				return std::count_if(topics.begin(), topics.end(), [&topic_name](auto &topic) {
-					return topic.tname() == topic_name && topic.direction() == "subscriber";
+				return std::count_if(topics.begin(), topics.end(), [&full_topic_name](auto &topic) {
+					return topic.tname() == full_topic_name && topic.direction() == "subscriber";
 				});
 			}
 
@@ -162,9 +163,10 @@ namespace eCAL
 			{
 				auto monitoring = GetMonitoringSnapshot();
 				auto &topics = monitoring.topics();
+				auto full_topic_name = pub_name_prefix + topic_name;
 
-				return std::count_if(topics.begin(), topics.end(), [&topic_name](auto &topic) {
-					return topic.tname() == topic_name && topic.direction() == "publisher";
+				return std::count_if(topics.begin(), topics.end(), [&full_topic_name](auto &topic) {
+					return topic.tname() == full_topic_name && topic.direction() == "publisher";
 				});
 			}
 
