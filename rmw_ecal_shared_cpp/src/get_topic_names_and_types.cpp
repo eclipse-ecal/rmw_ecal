@@ -14,8 +14,6 @@
 
 #include "rmw_ecal_shared_cpp/rmw/get_topic_names_and_types.hpp"
 
-// #include <rmw/rmw.h>
-
 #include <tuple>
 #include <algorithm>
 
