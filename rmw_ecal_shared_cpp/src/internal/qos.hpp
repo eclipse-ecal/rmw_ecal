@@ -36,14 +36,14 @@ namespace eCAL
     inline std::string DemangleTopicName(const std::string &topic_name)
     {
       if (topic_name.substr(0, 3) == pub_name_prefix + "/")
-        return topic_name.substr(3);
+        return topic_name.substr(2);
       return topic_name;
     }
 
     inline std::string DemangleServiceName(const std::string &service_name)
     {
       if (service_name.substr(0, 3) == service_name_prefix + "/")
-        return service_name.substr(3);
+        return service_name.substr(2);
       return service_name;
     }
 
