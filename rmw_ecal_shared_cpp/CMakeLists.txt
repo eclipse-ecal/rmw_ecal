@@ -70,6 +70,7 @@ set(proto_files
 	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/publisher.proto
 	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/client.proto
 	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/service.proto
+	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/extra_endpoint_info.proto
 	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/ecal/service.proto
 	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/ecal/host.proto
 	${CMAKE_CURRENT_SOURCE_DIR}/protobuf/ecal/process.proto
