@@ -19,6 +19,7 @@
 #include <queue>
 #include <memory>
 #include <algorithm>
+#include <cstring>
 #include <functional>
 
 #include <ecal/ecal.h>
