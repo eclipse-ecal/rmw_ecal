@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package eCAL.rmw.pb.GraphInfo;
-
-message ExtraEndpointInfo
-{
-	string node_name = 1;
-	string node_namespace = 2;
-};

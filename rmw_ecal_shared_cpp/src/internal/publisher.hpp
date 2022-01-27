@@ -26,15 +26,6 @@
 #include "internal/qos.hpp"
 #include "internal/event.hpp"
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4146 4800)
-#endif
-#include "extra_endpoint_info.pb.h"
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
 namespace eCAL
 {
   namespace rmw
@@ -63,12 +54,8 @@ namespace eCAL
                                       type_support_->GetMessageName(),
                                       type_support_->GetTypeDescriptor());
         publisher_.SetQOS(qos.ecal_qos);
-
-        pb::GraphInfo::ExtraEndpointInfo info;
-	info.set_node_name(node_name);
-	info.set_node_namespace(node_namespace);
-	publisher_.SetGenericDescription(info.SerializeAsString());
-
+        publisher_.SetAttribute("node_name", node_name);
+	publisher_.SetAttribute("node_namespace", node_namespace);
 	publisher_.AddEventCallback(eCAL_Publisher_Event::pub_event_dropped, std::bind(&Publisher::OnDataDropped, this, _1, _2));
       }
 

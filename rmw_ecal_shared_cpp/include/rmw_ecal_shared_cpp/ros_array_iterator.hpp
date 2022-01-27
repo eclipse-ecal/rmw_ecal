@@ -297,6 +297,17 @@ namespace eCAL
         return iterator<rmw_names_and_types_t>{array, array.names.size - 1};
       }
 
+ /*     template <>
+      inline iterator<rmw_topic_endpoint_info_array_t> Begin(rmw_topic_endpoint_info_array_t &array)
+      {
+        return iterator<rmw_topic_endpoint_info_array_t>{array, 0};
+      }
+
+      template <>
+      inline iterator<rmw_topic_endpoint_info_array_t> End(rmw_topic_endpoint_info_array_t &array)
+      {
+        return iterator<rmw_topic_endpoint_info_array_t>{array, array.names.size - 1};
+      }*/
     } // namespace RosArrayIterator
   }   // namespace rmw
 } // namespace eCAL
