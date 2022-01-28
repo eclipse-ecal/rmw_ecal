@@ -40,6 +40,11 @@ namespace eCAL
       return topic_name;
     }
 
+    inline std::string MangleTopicName(const std::string &topic_name)
+    {
+      return pub_name_prefix + topic_name;
+    }
+
     inline std::string DemangleServiceName(const std::string &service_name)
     {
       if (service_name.substr(0, 3) == service_name_prefix + "/")
