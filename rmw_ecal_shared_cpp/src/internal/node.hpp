@@ -136,9 +136,9 @@ namespace eCAL
     public:
       rmw_guard_condition_t *guard_condition;
 
-      Node(const std::string &name_space, const std::string &name) : query_service_{BuildQueryServiceName(namespace_, name)},
-	                                                             name_{name},
-								     namespace_{name_space}
+      Node(const std::string &name_space, const std::string &name) : name_{name},
+                                                                     namespace_{name_space},
+                                                                     query_service_{BuildQueryServiceName(namespace_, name)}
       {
         using namespace std::placeholders;
 
