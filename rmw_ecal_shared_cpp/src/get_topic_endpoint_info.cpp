@@ -64,10 +64,11 @@ namespace eCAL
       qos_profile.depth = endpoint_qos.history_depth;
       qos_profile.reliability = to_ros_policy(endpoint_qos.reliability);
       qos_profile.deadline = {0, 0};
-      qos_profile.durability = RMW_QOS_POLICY_DURABILITY_VOLATILE;
+      qos_profile.durability = RMW_QOS_POLICY_DURABILITY_TRANSIENT_LOCAL;
       qos_profile.lifespan = {0, 0};
       qos_profile.liveliness = RMW_QOS_POLICY_LIVELINESS_UNKNOWN;
       qos_profile.liveliness_lease_duration = {0, 0};
+      return qos_profile;
     }
 
     void transform_to_rmw_topic_endpoint_info_array(std::list<eCAL::rmw::Graph::TopicEndpointInfo>& topic_info, rmw_topic_endpoint_info_array_t *rmw_topic_info, rcutils_allocator_t *allocator)
@@ -162,6 +163,7 @@ namespace eCAL
         return RMW_RET_ERROR;
       }
 
+      std::cout << "ret" << std::endl;
       return RMW_RET_OK;
     }
 
