@@ -163,7 +163,6 @@ namespace eCAL
         return RMW_RET_ERROR;
       }
 
-      std::cout << "ret" << std::endl;
       return RMW_RET_OK;
     }
 
