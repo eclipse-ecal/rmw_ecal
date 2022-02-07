@@ -20,6 +20,7 @@
 
 #include <rmw/types.h>
 #include <rmw/names_and_types.h>
+#include <rmw/topic_endpoint_info_array.h>
 
 namespace eCAL
 {
@@ -273,6 +274,129 @@ namespace eCAL
         }
       };
 
+      template <>
+      class iterator<rmw_topic_endpoint_info_array_t>
+      {
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = typename std::remove_pointer<decltype(rmw_topic_endpoint_info_array_t::info_array)>::type;
+        using difference_type = std::ptrdiff_t;
+        using reference = value_type &;
+        using pointer = value_type *;
+
+        pointer current_;
+      public:
+        iterator(pointer start) : current_{start} {}
+        // TODO: PVS issue V690 (https://www.viva64.com/en/w/v690/print/)
+        // should be .. ?
+        // iterator(const iterator& rhs) = { current_ = rhs.current_; }
+        iterator(const iterator &) = default;
+        ~iterator() = default;
+
+        iterator &operator=(const iterator &rhs)
+        {
+          current_ = rhs.current_;
+          return *this;
+        }
+
+        iterator &operator++()
+        {
+          current_++;
+          return *this;
+        }
+
+        iterator operator++(int)
+        {
+          auto old = *this;
+          current_++;
+          return old;
+        }
+
+        iterator &operator--()
+        {
+          current_--;
+          return *this;
+        }
+
+        iterator operator--(int)
+        {
+          auto old = *this;
+          current_--;
+          return old;
+        }
+
+        bool operator<(const iterator &other)
+        {
+          return current_ < other.current_;
+        }
+
+        bool operator>(const iterator &other)
+        {
+          return current_ > other.current_;
+        }
+
+        bool operator<=(const iterator &other)
+        {
+          return current_ <= other.current_;
+        }
+
+        bool operator>=(const iterator &other)
+        {
+          return current_ >= other.current_;
+        }
+
+        iterator operator+(difference_type offset)
+        {
+          return iterator{current_ + offset};
+        }
+
+        iterator &operator+=(difference_type offset)
+        {
+          current_ += offset;
+          return *this;
+        }
+
+        iterator &operator-=(difference_type offset)
+        {
+          current_ -= offset;
+          return *this;
+        }
+
+        iterator operator-(difference_type offset)
+        {
+          return iterator{current_ - offset};
+        }
+
+        difference_type operator-(iterator other)
+        {
+          return reinterpret_cast<difference_type>(other.current_ - current_);
+        }
+
+        bool operator==(const iterator &other)
+        {
+          return current_ == other.current_;
+        }
+
+        bool operator!=(const iterator &other)
+        {
+          return !(*this == other);
+        }
+
+        reference operator*() const
+        {
+          return *current_;
+        }
+
+        pointer operator->() const
+        {
+          return current_;
+        }
+
+        reference operator[](difference_type index) const
+        {
+          return current_[index];
+        }
+      };
+
       template <typename ROS_ARRAY_T>
       inline iterator<ROS_ARRAY_T> Begin(ROS_ARRAY_T &array)
       {
@@ -297,6 +421,17 @@ namespace eCAL
         return iterator<rmw_names_and_types_t>{array, array.names.size - 1};
       }
 
+      template <>
+      inline iterator<rmw_topic_endpoint_info_array_t> Begin(rmw_topic_endpoint_info_array_t &array)
+      {
+        return iterator<rmw_topic_endpoint_info_array_t>{array.info_array};
+      }
+
+      template <>
+      inline iterator<rmw_topic_endpoint_info_array_t> End(rmw_topic_endpoint_info_array_t &array)
+      {
+        return iterator<rmw_topic_endpoint_info_array_t>{array.info_array + array.size};
+      }
     } // namespace RosArrayIterator
   }   // namespace rmw
 } // namespace eCAL

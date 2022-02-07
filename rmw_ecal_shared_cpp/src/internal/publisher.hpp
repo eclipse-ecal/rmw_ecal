@@ -43,7 +43,7 @@ namespace eCAL
       }
 
     public:
-      Publisher(const std::string &topic_name, MessageTypeSupport *ts, const PublisherQOS &qos)
+      Publisher(const std::string &topic_name, const std::string &node_name, const std::string &node_namespace, MessageTypeSupport *ts, const PublisherQOS &qos)
           : type_support_(ts)
       {
         using namespace std::placeholders;
@@ -54,7 +54,9 @@ namespace eCAL
                                       type_support_->GetMessageName(),
                                       type_support_->GetTypeDescriptor());
         publisher_.SetQOS(qos.ecal_qos);
-        publisher_.AddEventCallback(eCAL_Publisher_Event::pub_event_dropped, std::bind(&Publisher::OnDataDropped, this, _1, _2));
+        publisher_.SetAttribute("node_name", node_name);
+	publisher_.SetAttribute("node_namespace", node_namespace);
+	publisher_.AddEventCallback(eCAL_Publisher_Event::pub_event_dropped, std::bind(&Publisher::OnDataDropped, this, _1, _2));
       }
 
       void Publish(const void *data)

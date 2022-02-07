@@ -79,6 +79,51 @@ namespace eCAL
 				std::string response_type;
 			};
 
+			enum class TopicEndpointType
+			{
+				PUBLISHER,
+				SUBSCRIBER
+			};
+
+			enum class TopicEndpointQOSReliability
+			{
+				BEST_EFFORT,
+				RELIABLE
+			};
+
+			enum class TopicEndpointQOSHistoryKind
+			{
+				KEEP_LAST,
+				KEEP_ALL
+			};
+
+			struct TopicEndpointQOS
+			{
+				TopicEndpointQOSReliability reliability;
+				TopicEndpointQOSHistoryKind history_kind;
+				int32_t history_depth;
+			};
+
+			struct TopicEndpointInfo
+			{
+				TopicEndpointInfo(std::string node_name_,
+						  std::string node_namespace_,
+						  std::string type_,
+						  TopicEndpointType endpoint_type_,
+  				                  TopicEndpointQOS qos_profile_)
+					: node_name{node_name_}, node_namespace{node_namespace_},
+					type{type_}, endpoint_type{endpoint_type_},
+					qos_profile{qos_profile_}
+				{
+				}
+
+				std::string node_name;
+				std::string node_namespace;
+				std::string type;
+				TopicEndpointType endpoint_type;
+  				TopicEndpointQOS qos_profile;
+			};
+
 			namespace
 			{
 
@@ -256,6 +301,38 @@ namespace eCAL
 				return data;
 			}
 
+			inline std::list<TopicEndpointInfo> GetTopicEndpointInfo(const std::string &topic_name, TopicEndpointType endpoint_type)
+			{
+				std::list<TopicEndpointInfo> topics;
+
+				auto monitoring = GetMonitoringSnapshot();
+				auto &ecal_topics = monitoring.topics();
+
+				for (auto &topic : ecal_topics)
+				{
+					if(topic.tname() == topic_name &&
+					endpoint_type == (topic.direction() == "publisher" ? TopicEndpointType::PUBLISHER : TopicEndpointType::SUBSCRIBER))
+					{
+						auto ep_type = endpoint_type;
+  						TopicEndpointQOS qos_profile;
+						qos_profile.reliability =
+							topic.tqos().reliability() == pb::QOS_eQOSPolicy_Reliability_best_effort_reliability_qos ?
+							TopicEndpointQOSReliability::RELIABLE : TopicEndpointQOSReliability::BEST_EFFORT;
+						qos_profile.history_kind = topic.tqos().history() == pb::QOS_eQOSPolicy_HistoryKind_keep_all_history_qos ?
+							TopicEndpointQOSHistoryKind::KEEP_ALL : TopicEndpointQOSHistoryKind::KEEP_ALL;
+						qos_profile.history_depth = topic.tqos().history_depth();
+						auto get_attr = [&topic] (const std::string &name) -> std::string {
+							auto search = topic.attr().find(name);
+							if (search == topic.attr().end()) return std::string{""};
+							return search->second;
+						};
+						topics.emplace_back(get_attr("node_name"), get_attr("node_namespace"), topic.ttype(), ep_type, qos_profile);
+					}
+				}
+
+				return topics;
+			}
+
 		} // namespace Graph
-	}	  // namespace rmw
+	} // namespace rmw
 } // namespace eCAL

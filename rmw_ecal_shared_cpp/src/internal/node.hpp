@@ -47,6 +47,9 @@ namespace eCAL
   {
     class Node
     {
+      std::string name_;
+      std::string namespace_;
+
       eCAL::CServiceServer query_service_;
 
       std::unordered_set<Subscriber *> subscribers_;
@@ -133,7 +136,9 @@ namespace eCAL
     public:
       rmw_guard_condition_t *guard_condition;
 
-      Node(const std::string &namespace_, const std::string &name) : query_service_{BuildQueryServiceName(namespace_, name)}
+      Node(const std::string &name_space, const std::string &name) : name_{name},
+                                                                     namespace_{name_space},
+                                                                     query_service_{BuildQueryServiceName(namespace_, name)}
       {
         using namespace std::placeholders;
 
@@ -149,7 +154,7 @@ namespace eCAL
 
       Subscriber *CreateSubscriber(const std::string &topic_name, MessageTypeSupport *ts, const SubscriberQOS &qos)
       {
-        auto sub = new Subscriber{topic_name, ts, qos};
+        auto sub = new Subscriber{topic_name, name_, namespace_, ts, qos};
         subscribers_.insert(sub);
         return sub;
       }
@@ -165,7 +170,7 @@ namespace eCAL
 
       Publisher *CreatePublisher(const std::string &topic_name, MessageTypeSupport *ts, const PublisherQOS &qos)
       {
-        auto pub = new Publisher{topic_name, ts, qos};
+        auto pub = new Publisher{topic_name, name_, namespace_, ts, qos};
         publishers_.insert(pub);
         return pub;
       }

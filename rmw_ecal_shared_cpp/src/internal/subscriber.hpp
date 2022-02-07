@@ -19,6 +19,7 @@
 #include <queue>
 #include <memory>
 #include <algorithm>
+#include <cstring>
 #include <functional>
 
 #include <ecal/ecal.h>
@@ -118,7 +119,7 @@ namespace eCAL
       }
 
     public:
-      Subscriber(const std::string &topic_name, MessageTypeSupport *ts, const SubscriberQOS &qos)
+      Subscriber(const std::string &topic_name, const std::string &node_name, const std::string &node_namespace, MessageTypeSupport *ts, const SubscriberQOS &qos)
           : type_support_(ts)
       {
         using namespace std::placeholders;
@@ -129,6 +130,10 @@ namespace eCAL
                                         type_support_->GetMessageName(),
                                         type_support_->GetTypeDescriptor());
         subscriber_.SetQOS(qos.ecal_qos);
+
+        subscriber_.SetAttribute("node_name", node_name);
+        subscriber_.SetAttribute("node_namespace", node_namespace);
+
         subscriber_.AddReceiveCallback(std::bind(&Subscriber::OnReceiveData, this, _1, _2));
         subscriber_.AddEventCallback(eCAL_Subscriber_Event::sub_event_dropped, std::bind(&Subscriber::OnDataDropped, this, _1, _2));
       }
