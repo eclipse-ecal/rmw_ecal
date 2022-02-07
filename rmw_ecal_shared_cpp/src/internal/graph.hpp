@@ -236,16 +236,15 @@ namespace eCAL
 			inline pb::GraphInfo::Subscribers GetSubscribers(const std::string &node_namespace, const std::string &node_name)
 			{
 				pb::GraphInfo::Subscribers data;
-				eCAL::SServiceInfo service_info;
-				std::string response;
+				eCAL::ServiceResponseVecT response;
 
 				auto service_name = BuildQueryServiceName(node_namespace, node_name);
 
 				eCAL::CServiceClient client{service_name};
 
-				client.Call("", "GetSubscribers", "", service_info, response);
+				client.Call("GetSubscribers", "", /* timeout */ -1, &response);
 
-				data.ParseFromString(response);
+				data.ParseFromString(response[0].response);
 
 				return data;
 			}
@@ -253,16 +252,15 @@ namespace eCAL
 			inline pb::GraphInfo::Publishers GetPublishers(const std::string &node_namespace, const std::string &node_name)
 			{
 				pb::GraphInfo::Publishers data;
-				eCAL::SServiceInfo service_info;
-				std::string response;
+				eCAL::ServiceResponseVecT response;
 
 				auto service_name = BuildQueryServiceName(node_namespace, node_name);
 
 				eCAL::CServiceClient client{service_name};
 
-				client.Call("", "GetPublishers", "", service_info, response);
+				client.Call("GetPublishers", "", /* timeout */ -1, &response);
 
-				data.ParseFromString(response);
+				data.ParseFromString(response[0].response);
 
 				return data;
 			}
@@ -270,16 +268,15 @@ namespace eCAL
 			inline pb::GraphInfo::Services GetServices(const std::string &node_namespace, const std::string &node_name)
 			{
 				pb::GraphInfo::Services data;
-				eCAL::SServiceInfo service_info;
-				std::string response;
+				eCAL::ServiceResponseVecT response;
 
 				auto service_name = BuildQueryServiceName(node_namespace, node_name);
 
 				eCAL::CServiceClient client{service_name};
 
-				client.Call("", "GetServices", "", service_info, response);
+				client.Call("GetServices", "", /* timeout */ -1, &response);
 
-				data.ParseFromString(response);
+				data.ParseFromString(response[0].response);
 
 				return data;
 			}
@@ -287,16 +284,15 @@ namespace eCAL
 			inline pb::GraphInfo::Clients GetClients(const std::string &node_namespace, const std::string &node_name)
 			{
 				pb::GraphInfo::Clients data;
-				eCAL::SServiceInfo service_info;
-				std::string response;
+				eCAL::ServiceResponseVecT response;
 
 				auto service_name = BuildQueryServiceName(node_namespace, node_name);
 
 				eCAL::CServiceClient client{service_name};
 
-				client.Call("", "GetClients", "", service_info, response);
+				client.Call("GetClients", "", /* timeout */ -1, &response);
 
-				data.ParseFromString(response);
+				data.ParseFromString(response[0].response);
 
 				return data;
 			}

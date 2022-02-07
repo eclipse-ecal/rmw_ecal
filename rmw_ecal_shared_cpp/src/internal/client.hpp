@@ -88,9 +88,9 @@ class Client
 		responses_.emplace(seq_no, data, actual_data_size);
 	}
 
-	void OnResponse(const SServiceInfo & /* service_info */, const std::string &response)
+	void OnResponse(const SServiceResponse &response)
 	{
-		EnqueueResponse(response);
+		EnqueueResponse(response.response);
 		NotifyWaitSet();
 		PopLastRequest();
 		PerformNextRequest();
@@ -130,20 +130,19 @@ class Client
 
 		std::lock_guard<std::mutex> queue_lock(request_queue_mutex_);
 		requests_.emplace(sequence_number, std::move(serialized_data));
-		
+
 		if(requests_.size() == 1)
 		{
 			auto &latest_data = requests_.front();
 			client_.CallAsync(type_support_->GetServiceSimpleName(), latest_data.data);
 		}
-		
+
 		return sequence_number;
 	}
 
 	void PerformNextRequest()
 	{
 		std::lock_guard<std::mutex> queue_lock(request_queue_mutex_);
-		
 		if(!requests_.empty())
 		{
 			auto &latest_data = requests_.front();
@@ -164,7 +163,7 @@ public:
 	{
 		using namespace std::placeholders;
 
-		client_.AddResponseCallback(std::bind(&Client::OnResponse, this, _1, _2));
+		client_.AddResponseCallback(std::bind(&Client::OnResponse, this, _1));
 	}
 
 	sequence_number_t SendRequest(const void *data)
@@ -212,13 +211,12 @@ public:
 		std::lock_guard<std::mutex> lock(wait_set_mutex_);
 		wait_set_ = nullptr;
 	}
-	
+
 	bool IsServiceAvailable()
 	{
-		eCAL::SServiceInfo service_info;
-		std::string response;
+		eCAL::ServiceResponseVecT response;
 
-		return client_.Call("", "_Ping" + type_support_->GetServiceSimpleName(), "", service_info, response);
+		return client_.Call("_Ping" + type_support_->GetServiceSimpleName(), "", -1, &response);
 	}
 };
 
