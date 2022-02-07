@@ -16,12 +16,14 @@
 
 #include <string>
 #include <stdexcept>
+#include <cstring>
 
 #include <rosidl_typesupport_introspection_c/field_types.h>
 
 #include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
 
 #include "common.hpp"
+#include "type_info.hpp"
 
 namespace eCAL
 {
@@ -72,10 +74,23 @@ namespace eCAL
                                                     std::string &serialized_data) const
     {
       auto sub_members = GetMembers(member);
-      for (size_t i = 0; i < member->array_size_; i++)
+      auto member_size = sub_members->size_of_;
+      auto array_size = member->array_size_;
+
+      if(TypeInfo::IsMemcopyable(sub_members))
       {
-        SerializeMessage(data, sub_members, serialized_data);
-        data += sub_members->size_of_;
+        auto data_size = member_size * array_size;
+        auto old_size = serialized_data.size();
+        serialized_data.resize(serialized_data.size() + data_size);
+        std::memcpy(&serialized_data[old_size], data, data_size);
+      }
+      else
+      {
+        for (size_t i = 0; i < member->array_size_; i++)
+        {
+          SerializeMessage(data, sub_members, serialized_data);
+          data += sub_members->size_of_;
+        }
       }
     }
 
@@ -108,10 +123,20 @@ namespace eCAL
       auto sub_members = GetMembers(member);
 
       SerializeSingle<array_size_t>(sequence->size, serialized_data);
-      for (size_t i = 0; i < sequence->size; i++)
+      if(TypeInfo::IsMemcopyable(sub_members))
       {
-        SerializeMessage(sequence_data, sub_members, serialized_data);
-        sequence_data += sub_members->size_of_;
+	auto data_size = sequence->size * sub_members->size_of_;
+	auto old_size = serialized_data.size();
+	serialized_data.resize(old_size + data_size);
+	std::memcpy(&serialized_data[old_size], sequence_data, data_size);
+      }
+      else
+      {
+        for (size_t i = 0; i < sequence->size; i++)
+        {
+          SerializeMessage(sequence_data, sub_members, serialized_data);
+          sequence_data += sub_members->size_of_;
+        }
       }
     }
 
@@ -165,6 +190,14 @@ namespace eCAL
                                        const rosidl_typesupport_introspection_c__MessageMembers *members,
                                        std::string &serialized_data) const
     {
+      if (TypeInfo::IsMemcopyable(members))
+      {
+        auto data_size = members->size_of_;
+	auto old_size = serialized_data.size();
+        serialized_data.resize(old_size + data_size);
+        std::memcpy(&serialized_data[old_size], data, data_size);
+        return;
+      }
       for (uint32_t i = 0; i < members->member_count_; i++)
       {
         auto member = members->members_ + i;
@@ -226,6 +259,12 @@ namespace eCAL
           throw std::logic_error("Wide character/string serialization is unsupported.");
         }
       }
+    }
+
+    CSerializer::CSerializer(const rosidl_typesupport_introspection_c__MessageMembers *members)
+          : members_(members)
+    {
+      TypeInfo::AnalyzeType(members);
     }
 
     const std::string CSerializer::Serialize(const void *data)

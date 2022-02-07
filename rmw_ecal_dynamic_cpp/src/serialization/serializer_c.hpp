@@ -61,10 +61,7 @@ namespace eCAL
                             std::string &serialized_data) const;
 
     public:
-      explicit CSerializer(const rosidl_typesupport_introspection_c__MessageMembers *members)
-          : members_(members)
-      {
-      }
+      explicit CSerializer(const rosidl_typesupport_introspection_c__MessageMembers *members);
 
       virtual const std::string Serialize(const void *data) override;
       virtual const std::string GetMessageStringDescriptor() const override;
