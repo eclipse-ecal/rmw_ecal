@@ -12,6 +12,7 @@
 
 	<depend>rmw_ecal_shared_cpp</depend>
 	<depend>rmw_implementation_cmake</depend>
+	<depend>rosidl_generator_c</depend>
 
 	<group_depend>rmw_implementation_packages</group_depend>
 
