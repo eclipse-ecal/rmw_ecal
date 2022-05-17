@@ -2,6 +2,8 @@
 
 ROS2 middleware based on eCAL.
 
+**NOTE:** Minimun eCAL compatible with RMW is 5.10.
+
 eCAL RMW can offer:
 
 * High performance (shared memory is used for inter-process communication and udp multicast for inter-host communication)
