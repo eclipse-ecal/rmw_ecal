@@ -14,7 +14,7 @@
 
 #include <rmw/init_options.h>
 
-#include<rmw/rmw.h>
+#include <rmw/rmw.h>
 
 #include <rmw_ecal_shared_cpp/rmw/init_options.hpp>
 
