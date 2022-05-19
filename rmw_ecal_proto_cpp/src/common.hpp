@@ -22,8 +22,6 @@
 #include <rosidl_typesupport_protobuf_c/identifier.hpp>
 #include <rosidl_typesupport_protobuf_cpp/identifier.hpp>
 
-#include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
-
 inline const rosidl_typesupport_protobuf::message_type_support_t *GetTypeSupport(const rosidl_message_type_support_t *type_support)
 {
   auto ts{get_message_typesupport_handle(type_support, rosidl_typesupport_protobuf_cpp::identifier)};

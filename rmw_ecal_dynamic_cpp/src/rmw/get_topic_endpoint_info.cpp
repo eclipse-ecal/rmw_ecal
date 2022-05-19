@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if ROS_DISTRO >= FOXY
-
 #include <rmw/get_topic_endpoint_info.h>
 
 #include <rmw/rmw.h>
@@ -33,5 +31,3 @@ rmw_ret_t rmw_get_subscriptions_info_by_topic(const rmw_node_t *node, rcutils_al
 {
   return eCAL::rmw::rmw_get_subscriptions_info_by_topic(::rmw_get_implementation_identifier(), node, allocator, topic_name, no_mangle, subscriptions_info);
 }
-
-#endif

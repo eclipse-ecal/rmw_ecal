@@ -39,7 +39,7 @@ rmw_node_t *rmw_create_node(rmw_context_t *context,
 {
   return eCAL::rmw::rmw_create_node(::rmw_get_implementation_identifier(), context, name, namespace_);
 }
-#elif ROS_DISTRO == FOXY
+#else
 rmw_node_t *rmw_create_node(rmw_context_t *context,
                             const char *name,
                             const char *namespace_,
@@ -47,26 +47,6 @@ rmw_node_t *rmw_create_node(rmw_context_t *context,
                             bool localhost_only)
 {
   return eCAL::rmw::rmw_create_node(::rmw_get_implementation_identifier(), context, name, namespace_, domain_id, localhost_only);
-}
-#elif ROS_DISTRO == ELOQUENT
-rmw_node_t *rmw_create_node(rmw_context_t *context,
-                            const char *name,
-                            const char *namespace_,
-                            size_t domain_id,
-                            const rmw_node_security_options_t *security_options,
-                            bool local_host_only)
-{
-  return eCAL::rmw::rmw_create_node(::rmw_get_implementation_identifier(), context, name, namespace_, domain_id, security_options, local_host_only);
-}
-#else
-rmw_node_t *rmw_create_node(rmw_context_t *context,
-                            const char *name,
-                            const char *namespace_,
-                            size_t domain_id,
-                            const rmw_node_security_options_t *security_options)
-
-{
-  return eCAL::rmw::rmw_create_node(::rmw_get_implementation_identifier(), context, name, namespace_, domain_id, security_options);
 }
 #endif
 
@@ -85,7 +65,6 @@ const rmw_guard_condition_t *rmw_node_get_graph_guard_condition(const rmw_node_t
   return eCAL::rmw::rmw_node_get_graph_guard_condition(::rmw_get_implementation_identifier(), node);
 }
 
-#if ROS_DISTRO >= ELOQUENT
 rmw_publisher_t *rmw_create_publisher(const rmw_node_t *node,
                                       const rosidl_message_type_support_t *type_support,
                                       const char *topic_name,
@@ -94,15 +73,6 @@ rmw_publisher_t *rmw_create_publisher(const rmw_node_t *node,
 {
   return eCAL::rmw::rmw_create_publisher(::rmw_get_implementation_identifier(), eCAL::rmw::CustomTypeSupportFactory{}, node, type_support, topic_name, qos_policies, publisher_options);
 }
-#else
-rmw_publisher_t *rmw_create_publisher(const rmw_node_t *node,
-                                      const rosidl_message_type_support_t *type_support,
-                                      const char *topic_name,
-                                      const rmw_qos_profile_t *qos_policies)
-{
-  return eCAL::rmw::rmw_create_publisher(::rmw_get_implementation_identifier(), eCAL::rmw::CustomTypeSupportFactory{}, node, type_support, topic_name, qos_policies);
-}
-#endif
 
 rmw_ret_t rmw_destroy_publisher(rmw_node_t *node, rmw_publisher_t *publisher)
 {
@@ -135,21 +105,12 @@ rmw_ret_t rmw_publish_serialized_message(const rmw_publisher_t *publisher,
   return eCAL::rmw::rmw_publish_serialized_message(::rmw_get_implementation_identifier(), publisher, serialized_message, allocation);
 }
 
-#if ROS_DISTRO >= FOXY
 rmw_ret_t rmw_get_serialized_message_size(const rosidl_message_type_support_t *type_support,
                                           const rosidl_runtime_c__Sequence__bound *message_bounds,
                                           size_t *size)
 {
   return eCAL::rmw::rmw_get_serialized_message_size(::rmw_get_implementation_identifier(), type_support, message_bounds, size);
 }
-#else
-rmw_ret_t rmw_get_serialized_message_size(const rosidl_message_type_support_t *type_support,
-                                          const rosidl_message_bounds_t *message_bounds,
-                                          size_t *size)
-{
-  return eCAL::rmw::rmw_get_serialized_message_size(::rmw_get_implementation_identifier(), type_support, message_bounds, size);
-}
-#endif
 
 rmw_ret_t rmw_serialize(const void *ros_message,
                         const rosidl_message_type_support_t *type_support,
@@ -165,7 +126,6 @@ rmw_ret_t rmw_deserialize(const rmw_serialized_message_t *serialized_message,
   return eCAL::rmw::rmw_deserialize(::rmw_get_implementation_identifier(), eCAL::rmw::CustomSerializerFactory{}, serialized_message, type_support, ros_message);
 }
 
-#if ROS_DISTRO >= ELOQUENT
 rmw_subscription_t *rmw_create_subscription(const rmw_node_t *node,
                                             const rosidl_message_type_support_t *type_support,
                                             const char *topic_name,
@@ -174,16 +134,6 @@ rmw_subscription_t *rmw_create_subscription(const rmw_node_t *node,
 {
   return eCAL::rmw::rmw_create_subscription(::rmw_get_implementation_identifier(), eCAL::rmw::CustomTypeSupportFactory{}, node, type_support, topic_name, qos_policies, subscription_options);
 }
-#else
-rmw_subscription_t *rmw_create_subscription(const rmw_node_t *node,
-                                            const rosidl_message_type_support_t *type_support,
-                                            const char *topic_name,
-                                            const rmw_qos_profile_t *qos_policies,
-                                            bool ignore_local_publications)
-{
-  return eCAL::rmw::rmw_create_subscription(::rmw_get_implementation_identifier(), eCAL::rmw::CustomTypeSupportFactory{}, node, type_support, topic_name, qos_policies, ignore_local_publications);
-}
-#endif
 
 rmw_ret_t rmw_destroy_subscription(rmw_node_t *node, rmw_subscription_t *subscription)
 {
@@ -213,7 +163,6 @@ rmw_ret_t rmw_take_with_info(const rmw_subscription_t *subscription,
   return eCAL::rmw::rmw_take_with_info(::rmw_get_implementation_identifier(), subscription, ros_message, taken, message_info, allocation);
 }
 
-#if ROS_DISTRO >= FOXY
 rmw_ret_t rmw_take_sequence(const rmw_subscription_t *subscription,
                             size_t count,
                             rmw_message_sequence_t *message_sequence,
@@ -224,7 +173,6 @@ rmw_ret_t rmw_take_sequence(const rmw_subscription_t *subscription,
   return eCAL::rmw::rmw_take_sequence(::rmw_get_implementation_identifier(), subscription, count, message_sequence, message_info_sequence,
                                       taken, allocation);
 }
-#endif
 
 rmw_ret_t rmw_take_serialized_message(const rmw_subscription_t *subscription,
                                       rmw_serialized_message_t *serialized_message,
@@ -264,24 +212,13 @@ rmw_ret_t rmw_send_request(const rmw_client_t *client,
   return eCAL::rmw::rmw_send_request(::rmw_get_implementation_identifier(), client, ros_request, sequence_id);
 }
 
-#if ROS_DISTRO >= FOXY
-rmw_ret_t
-rmw_take_response(const rmw_client_t *client,
+rmw_ret_t rmw_take_response(const rmw_client_t *client,
                   rmw_service_info_t *request_header,
                   void *ros_response,
                   bool *taken)
 {
   return eCAL::rmw::rmw_take_response(::rmw_get_implementation_identifier(), client, request_header, ros_response, taken);
 }
-#else
-rmw_ret_t rmw_take_response(const rmw_client_t *client,
-                            rmw_request_id_t *rmw_request_id,
-                            void *ros_response,
-                            bool *taken)
-{
-  return eCAL::rmw::rmw_take_response(::rmw_get_implementation_identifier(), client, rmw_request_id, ros_response, taken);
-}
-#endif
 
 rmw_service_t *rmw_create_service(const rmw_node_t *node,
                                   const rosidl_service_type_support_t *type_support,
@@ -296,7 +233,6 @@ rmw_ret_t rmw_destroy_service(rmw_node_t *node, rmw_service_t *service)
   return eCAL::rmw::rmw_destroy_service(::rmw_get_implementation_identifier(), node, service);
 }
 
-#if ROS_DISTRO >= FOXY
 rmw_ret_t rmw_take_request(const rmw_service_t *service,
                            rmw_service_info_t *request_header,
                            void *ros_request,
@@ -304,15 +240,6 @@ rmw_ret_t rmw_take_request(const rmw_service_t *service,
 {
   return eCAL::rmw::rmw_take_request(::rmw_get_implementation_identifier(), service, request_header, ros_request, taken);
 }
-#else
-rmw_ret_t rmw_take_request(const rmw_service_t *service,
-                           rmw_request_id_t *request_header,
-                           void *ros_request,
-                           bool *taken)
-{
-  return eCAL::rmw::rmw_take_request(::rmw_get_implementation_identifier(), service, request_header, ros_request, taken);
-}
-#endif
 
 rmw_ret_t rmw_send_response(const rmw_service_t *service,
                             rmw_request_id_t *request_header,
@@ -365,7 +292,6 @@ rmw_ret_t rmw_get_node_names(const rmw_node_t *node,
   return eCAL::rmw::rmw_get_node_names(::rmw_get_implementation_identifier(), node, node_names, node_namespaces);
 }
 
-#if ROS_DISTRO >= FOXY
 rmw_ret_t rmw_get_node_names_with_enclaves(const rmw_node_t *node,
                                            rcutils_string_array_t *node_names,
                                            rcutils_string_array_t *node_namespaces,
@@ -373,7 +299,6 @@ rmw_ret_t rmw_get_node_names_with_enclaves(const rmw_node_t *node,
 {
   return eCAL::rmw::rmw_get_node_names_with_enclaves(::rmw_get_implementation_identifier(), node, node_names, node_namespaces, enclaves);
 }
-#endif
 
 rmw_ret_t rmw_count_publishers(const rmw_node_t *node,
                                const char *topic_name,
@@ -417,21 +342,12 @@ rmw_ret_t rmw_subscription_get_actual_qos(const rmw_subscription_t *subscription
   return eCAL::rmw::rmw_subscription_get_actual_qos(::rmw_get_implementation_identifier(), subscription, qos);
 }
 
-#if ROS_DISTRO >= FOXY
 rmw_ret_t rmw_init_publisher_allocation(const rosidl_message_type_support_t *type_support,
                                         const rosidl_runtime_c__Sequence__bound *message_bounds,
                                         rmw_publisher_allocation_t *allocation)
 {
   return eCAL::rmw::rmw_init_publisher_allocation(::rmw_get_implementation_identifier(), type_support, message_bounds, allocation);
 }
-#else
-rmw_ret_t rmw_init_publisher_allocation(const rosidl_message_type_support_t *type_support,
-                                        const rosidl_message_bounds_t *message_bounds,
-                                        rmw_publisher_allocation_t *allocation)
-{
-  return eCAL::rmw::rmw_init_publisher_allocation(::rmw_get_implementation_identifier(), type_support, message_bounds, allocation);
-}
-#endif
 
 rmw_ret_t rmw_fini_publisher_allocation(rmw_publisher_allocation_t *allocation)
 {
@@ -443,21 +359,12 @@ rmw_ret_t rmw_publisher_assert_liveliness(const rmw_publisher_t *publisher)
   return eCAL::rmw::rmw_publisher_assert_liveliness(::rmw_get_implementation_identifier(), publisher);
 }
 
-#if ROS_DISTRO >= FOXY
 rmw_ret_t rmw_init_subscription_allocation(const rosidl_message_type_support_t *type_support,
                                            const rosidl_runtime_c__Sequence__bound *message_bounds,
                                            rmw_subscription_allocation_t *allocation)
 {
   return eCAL::rmw::rmw_init_subscription_allocation(::rmw_get_implementation_identifier(), type_support, message_bounds, allocation);
 }
-#else
-rmw_ret_t rmw_init_subscription_allocation(const rosidl_message_type_support_t *type_support,
-                                           const rosidl_message_bounds_t *message_bounds,
-                                           rmw_subscription_allocation_t *allocation)
-{
-  return eCAL::rmw::rmw_init_subscription_allocation(::rmw_get_implementation_identifier(), type_support, message_bounds, allocation);
-}
-#endif
 
 rmw_ret_t rmw_fini_subscription_allocation(rmw_subscription_allocation_t *allocation)
 {

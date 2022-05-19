@@ -17,8 +17,6 @@
 # ========================= RMW eCAL LICENSE =================================
 
 set(supported_distros
-	dashing
-	eloquent
 	foxy
 	galactic
   rolling

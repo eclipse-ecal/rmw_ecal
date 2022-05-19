@@ -81,5 +81,5 @@ message Topic                                   // eCAL topic
   int64            did                   = 19;  // data send id (publisher setid)
   int64            dclock                = 20;  // data clock (send / receive action)
   int32            dfreq                 = 21;  // data frequency (send / receive samples per second) [mHz]
-  map<string, string> attr               = 27;  // topic attributes 
+  map<string, string> attr               = 27;  // topic attributes
 }
