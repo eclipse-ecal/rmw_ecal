@@ -1041,5 +1041,10 @@ namespace eCAL
       UNSUPPORTED;
     }
 
+    rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t * /* publisher */,
+                                               rmw_time_t /* wait_timeout */)
+    {
+      UNSUPPORTED;
+    }
   } // namespace rmw
 } // namespace eCAL
