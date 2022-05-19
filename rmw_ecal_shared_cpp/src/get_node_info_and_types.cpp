@@ -14,8 +14,6 @@
 
 #include "rmw_ecal_shared_cpp/rmw/get_node_info_and_types.hpp"
 
-//#include <rmw/rmw.h>
-
 #include "rmw_ecal_shared_cpp/string_functions.hpp"
 
 #include "internal/common.hpp"

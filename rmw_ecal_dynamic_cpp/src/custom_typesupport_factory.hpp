@@ -19,8 +19,6 @@
 #include <rosidl_typesupport_introspection_cpp/identifier.hpp>
 #include <rosidl_typesupport_introspection_c/identifier.h>
 
-#include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
-
 #include "typesupport/message_typesupport_c.hpp"
 #include "typesupport/message_typesupport_cpp.hpp"
 #include "typesupport/service_typesupport_c.hpp"

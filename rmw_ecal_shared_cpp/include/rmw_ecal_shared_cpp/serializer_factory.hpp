@@ -16,7 +16,6 @@
 
 #include <memory>
 
-#include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
 #include <rmw_ecal_shared_cpp/serializer.hpp>
 #include <rmw_ecal_shared_cpp/deserializer.hpp>
 #include <rmw_ecal_shared_cpp/visibility.h>

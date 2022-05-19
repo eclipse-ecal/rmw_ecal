@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if ROS_DISTRO >= FOXY
-
 #include <algorithm>
 
 #include "rmw_ecal_shared_cpp/rmw/get_topic_endpoint_info.hpp"
@@ -168,4 +166,3 @@ namespace eCAL
 
   } // namespace rmw
 } // namespace eCAL
-#endif

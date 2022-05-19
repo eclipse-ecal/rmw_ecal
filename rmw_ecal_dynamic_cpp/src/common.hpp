@@ -21,8 +21,6 @@
 #include <rosidl_typesupport_introspection_cpp/service_introspection.hpp>
 #include <rosidl_typesupport_introspection_c/service_introspection.h>
 
-#include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
-
 using array_size_t = uint64_t;
 //Represents arbitrary ros message type, used for consistency
 //of serialization/deserialization template functions.

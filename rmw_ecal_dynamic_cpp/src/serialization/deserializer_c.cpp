@@ -21,7 +21,10 @@
 
 #include <rosidl_typesupport_introspection_c/field_types.h>
 
-#include <rmw_ecal_shared_cpp/rosidl_generator_c_pkg_adapter.hpp>
+#include <rosidl_runtime_c/primitives_sequence.h>
+#include <rosidl_runtime_c/primitives_sequence_functions.h>
+#include <rosidl_runtime_c/string.h>
+#include <rosidl_runtime_c/string_functions.h>
 
 #include "common.hpp"
 #include "type_info.hpp"

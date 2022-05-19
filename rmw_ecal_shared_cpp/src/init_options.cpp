@@ -14,8 +14,6 @@
 
 #include "rmw_ecal_shared_cpp/rmw/init_options.hpp"
 
-//#include <rmw/rmw.h>
-//#include <rmw/types.h>
 #include <rmw/impl/cpp/macros.hpp>
 
 #include "internal/common.hpp"

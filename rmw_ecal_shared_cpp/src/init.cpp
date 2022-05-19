@@ -14,7 +14,6 @@
 
 #include "rmw_ecal_shared_cpp/rmw/init.hpp"
 
-// #include <rmw/rmw.h>
 #include <rmw/error_handling.h>
 #include <rmw/impl/cpp/macros.hpp>
 

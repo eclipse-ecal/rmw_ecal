@@ -46,36 +46,18 @@ namespace eCAL
                                 rmw_context_t *context,
                                 const char *name,
                                 const char *namespace_)
-#elif ROS_DISTRO == FOXY
-    rmw_node_t *rmw_create_node(const char *implementation_identifier,
-                                rmw_context_t *context,
-                                const char *name,
-                                const char *namespace_,
-                                size_t /* domain_id */,
-                                bool /* localhost_only */)
-#elif ROS_DISTRO == ELOQUENT
-    rmw_node_t *rmw_create_node(const char *implementation_identifier,
-                                rmw_context_t *context,
-                                const char *name,
-                                const char *namespace_,
-                                size_t /* domain_id */,
-                                const rmw_node_security_options_t *security_options,
-                                bool /* local_host_only */)
 #else
     rmw_node_t *rmw_create_node(const char *implementation_identifier,
                                 rmw_context_t *context,
                                 const char *name,
                                 const char *namespace_,
                                 size_t /* domain_id */,
-                                const rmw_node_security_options_t *security_options)
+                                bool /* localhost_only */)
 #endif
     {
       RMW_CHECK_ARGUMENT_FOR_NULL(context, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(name, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(namespace_, nullptr);
-#if ROS_DISTRO < FOXY
-      RMW_CHECK_ARGUMENT_FOR_NULL(security_options, nullptr);
-#endif
       CHECK_RMW_IMPLEMENTATION_RET_VALUE(implementation_identifier, context, nullptr);
 
       auto rmw_node = rmw_node_allocate();
@@ -120,7 +102,6 @@ namespace eCAL
       return GetImplementation(node)->guard_condition;
     }
 
-#if ROS_DISTRO >= ELOQUENT
     rmw_publisher_t *rmw_create_publisher(const char *implementation_identifier,
                                           const TypesupportFactory &ecal_typesupport_factory,
                                           const rmw_node_t *node,
@@ -128,22 +109,12 @@ namespace eCAL
                                           const char *topic_name,
                                           const rmw_qos_profile_t *qos_policies,
                                           const rmw_publisher_options_t *publisher_options)
-#else
-    rmw_publisher_t *rmw_create_publisher(const char *implementation_identifier,
-                                          const TypesupportFactory &ecal_typesupport_factory,
-                                          const rmw_node_t *node,
-                                          const rosidl_message_type_support_t *type_support,
-                                          const char *topic_name,
-                                          const rmw_qos_profile_t *qos_policies)
-#endif
     {
       RMW_CHECK_ARGUMENT_FOR_NULL(node, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(type_support, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(topic_name, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(qos_policies, nullptr);
-#if ROS_DISTRO >= ELOQUENT
       RMW_CHECK_ARGUMENT_FOR_NULL(publisher_options, nullptr);
-#endif
       CHECK_RMW_IMPLEMENTATION_RET_VALUE(implementation_identifier, node, nullptr);
 
       auto ecal_node = GetImplementation(node);
@@ -155,10 +126,8 @@ namespace eCAL
       rmw_pub->implementation_identifier = implementation_identifier;
       rmw_pub->topic_name = ConstructCString(topic_name);
       rmw_pub->data = ecal_pub;
-#if ROS_DISTRO >= ELOQUENT
       rmw_pub->options = *publisher_options;
       rmw_pub->can_loan_messages = false;
-#endif
 
       return rmw_pub;
     }
@@ -234,17 +203,10 @@ namespace eCAL
       return RMW_RET_OK;
     }
 
-#if ROS_DISTRO >= FOXY
     rmw_ret_t rmw_get_serialized_message_size(const char * /* implementation_identifier */,
                                               const rosidl_message_type_support_t * /* type_support */,
                                               const rosidl_runtime_c__Sequence__bound * /* message_bounds */,
                                               size_t * /* size */)
-#else
-    rmw_ret_t rmw_get_serialized_message_size(const char * /* implementation_identifier */,
-                                              const rosidl_message_type_support_t * /* type_support */,
-                                              const rosidl_message_bounds_t * /* message_bounds */,
-                                              size_t * /* size */)
-#endif
     {
       UNSUPPORTED;
     }
@@ -284,7 +246,6 @@ namespace eCAL
       return RMW_RET_OK;
     }
 
-#if ROS_DISTRO >= ELOQUENT
     rmw_subscription_t *rmw_create_subscription(const char *implementation_identifier,
                                                 const TypesupportFactory &ecal_typesupport_factory,
                                                 const rmw_node_t *node,
@@ -292,23 +253,12 @@ namespace eCAL
                                                 const char *topic_name,
                                                 const rmw_qos_profile_t *qos_policies,
                                                 const rmw_subscription_options_t *subscription_options)
-#else
-    rmw_subscription_t *rmw_create_subscription(const char *implementation_identifier,
-                                                const TypesupportFactory &ecal_typesupport_factory,
-                                                const rmw_node_t *node,
-                                                const rosidl_message_type_support_t *type_support,
-                                                const char *topic_name,
-                                                const rmw_qos_profile_t *qos_policies,
-                                                bool /* ignore_local_publications */)
-#endif
     {
       RMW_CHECK_ARGUMENT_FOR_NULL(node, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(topic_name, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(type_support, nullptr);
       RMW_CHECK_ARGUMENT_FOR_NULL(qos_policies, nullptr);
-#if ROS_DISTRO >= ELOQUENT
       RMW_CHECK_ARGUMENT_FOR_NULL(subscription_options, nullptr);
-#endif
       CHECK_RMW_IMPLEMENTATION_RET_VALUE(implementation_identifier, node, nullptr);
 
       auto ecal_node = GetImplementation(node);
@@ -320,9 +270,7 @@ namespace eCAL
       rmw_sub->implementation_identifier = implementation_identifier;
       rmw_sub->topic_name = ConstructCString(topic_name);
       rmw_sub->data = ecal_sub;
-#if ROS_DISTRO >= ELOQUENT
       rmw_sub->can_loan_messages = false;
-#endif
 
       return rmw_sub;
     }
@@ -385,7 +333,6 @@ namespace eCAL
       return rmw_take(implementation_identifier, subscription, ros_message, taken, allocation);
     }
 
-#if ROS_DISTRO >= FOXY
     rmw_ret_t rmw_take_sequence(const char *implementation_identifier,
                                 const rmw_subscription_t *subscription,
                                 size_t count,
@@ -421,7 +368,6 @@ namespace eCAL
 
       return RMW_RET_OK;
     }
-#endif
 
     rmw_ret_t rmw_take_serialized_message(const char *implementation_identifier,
                                           const rmw_subscription_t *subscription,
@@ -515,27 +461,14 @@ namespace eCAL
       return RMW_RET_OK;
     }
 
-#if ROS_DISTRO >= FOXY
-    rmw_ret_t
-    rmw_take_response(const char *implementation_identifier,
-                      const rmw_client_t *client,
-                      rmw_service_info_t *request_header,
-                      void *ros_response,
-                      bool *taken)
-#else
     rmw_ret_t rmw_take_response(const char *implementation_identifier,
                                 const rmw_client_t *client,
-                                rmw_request_id_t *rmw_request_id,
+                                rmw_service_info_t *request_header,
                                 void *ros_response,
                                 bool *taken)
-#endif
     {
       RMW_CHECK_ARGUMENT_FOR_NULL(client, RMW_RET_INVALID_ARGUMENT);
-#if ROS_DISTRO >= FOXY
       RMW_CHECK_ARGUMENT_FOR_NULL(request_header, RMW_RET_INVALID_ARGUMENT);
-#else
-      RMW_CHECK_ARGUMENT_FOR_NULL(rmw_request_id, RMW_RET_INVALID_ARGUMENT);
-#endif
       RMW_CHECK_ARGUMENT_FOR_NULL(ros_response, RMW_RET_INVALID_ARGUMENT);
       RMW_CHECK_ARGUMENT_FOR_NULL(taken, RMW_RET_INVALID_ARGUMENT);
       CHECK_RMW_IMPLEMENTATION(implementation_identifier, client);
@@ -543,11 +476,7 @@ namespace eCAL
       auto ecal_client = GetImplementation(client);
       if (ecal_client->HasResponse())
       {
-#if ROS_DISTRO >= FOXY
         request_header->request_id.sequence_number = ecal_client->TakeResponse(ros_response);
-#else
-        rmw_request_id->sequence_number = ecal_client->TakeResponse(ros_response);
-#endif
         *taken = true;
       }
 
@@ -595,19 +524,11 @@ namespace eCAL
       return RMW_RET_OK;
     }
 
-#if ROS_DISTRO >= FOXY
     rmw_ret_t rmw_take_request(const char *implementation_identifier,
                                const rmw_service_t *service,
                                rmw_service_info_t *request_header,
                                void *ros_request,
                                bool *taken)
-#else
-    rmw_ret_t rmw_take_request(const char *implementation_identifier,
-                               const rmw_service_t *service,
-                               rmw_request_id_t *request_header,
-                               void *ros_request,
-                               bool *taken)
-#endif
     {
       RMW_CHECK_ARGUMENT_FOR_NULL(service, RMW_RET_INVALID_ARGUMENT);
       RMW_CHECK_ARGUMENT_FOR_NULL(request_header, RMW_RET_INVALID_ARGUMENT);
@@ -618,11 +539,7 @@ namespace eCAL
       auto ecal_service = GetImplementation(service);
       if (ecal_service->HasRequest())
       {
-#if ROS_DISTRO >= FOXY
         request_header->request_id.sequence_number = ecal_service->TakeRequest(ros_request);
-#else
-        request_header->sequence_number = ecal_service->TakeRequest(ros_request);
-#endif
         *taken = true;
       }
 
@@ -925,7 +842,6 @@ namespace eCAL
       return RMW_RET_OK;
     }
 
-#if ROS_DISTRO >= FOXY
     rmw_ret_t rmw_get_node_names_with_enclaves(const char * /* implementation_identifier */,
                                                const rmw_node_t * /* node */,
                                                rcutils_string_array_t * /* node_names */,
@@ -934,7 +850,6 @@ namespace eCAL
     {
       UNSUPPORTED;
     }
-#endif
 
     rmw_ret_t rmw_count_publishers(const char *implementation_identifier,
                                    const rmw_node_t *node,
@@ -1043,17 +958,10 @@ namespace eCAL
       return RMW_RET_OK;
     }
 
-#if ROS_DISTRO >= FOXY
     rmw_ret_t rmw_init_publisher_allocation(const char * /* implementation_identifier */,
                                             const rosidl_message_type_support_t * /* type_support */,
                                             const rosidl_runtime_c__Sequence__bound * /* message_bounds */,
                                             rmw_publisher_allocation_t * /* allocation */)
-#else
-    rmw_ret_t rmw_init_publisher_allocation(const char * /*implementation_identifier */,
-                                            const rosidl_message_type_support_t * /* type_support */,
-                                            const rosidl_message_bounds_t * /* message_bounds */,
-                                            rmw_publisher_allocation_t * /* allocation */)
-#endif
     {
       UNSUPPORTED;
     }
@@ -1070,17 +978,10 @@ namespace eCAL
       UNSUPPORTED;
     }
 
-#if ROS_DISTRO >= FOXY
     rmw_ret_t rmw_init_subscription_allocation(const char * /* implementation_identifier */,
                                                const rosidl_message_type_support_t * /* type_support */,
                                                const rosidl_runtime_c__Sequence__bound * /* message_bounds */,
                                                rmw_subscription_allocation_t * /* allocation */)
-#else
-    rmw_ret_t rmw_init_subscription_allocation(const char * /* implementation_identifier */,
-                                               const rosidl_message_type_support_t * /* type_support */,
-                                               const rosidl_message_bounds_t * /* message_bounds */,
-                                               rmw_subscription_allocation_t * /* allocation */)
-#endif
     {
       UNSUPPORTED;
     }

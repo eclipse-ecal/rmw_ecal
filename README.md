@@ -82,7 +82,10 @@ Cons:
 
 ## Currently supported ROS2 distributions
 
-* Dashing Diademata
-* Eloquent Elusor
 * Foxy Fitzroy
 * Galactic Geochelone
+
+## Legacy ROS2 distributions
+
+* [Dashing Diademata](https://github.com/continental/rmw_ecal/tree/legacy/dashing)
+* [Eloquent Elusor](https://github.com/continental/rmw_ecal/tree/legacy/eloquent)

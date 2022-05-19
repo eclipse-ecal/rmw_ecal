@@ -14,8 +14,6 @@
 
 #include "rmw_ecal_shared_cpp/rmw/event.hpp"
 
-//#include <rmw/rmw.h>
-
 #include "internal/common.hpp"
 #include "internal/publisher.hpp"
 #include "internal/subscriber.hpp"
