@@ -15,19 +15,25 @@ jobs:
         ros_distribution:
           - foxy
           - galactic
+          - humble
           - rolling
         include:
-          # Foxy Fitzroy (June 2020 - May 2023)
+          # Foxy Fitzroy
           - os: ubuntu
             os_release: focal
             ros_distribution: foxy
             ros_version: 2
-          # Galactic Geochelone (June 2020 - May 2023)
+          # Galactic Geochelone
           - os: ubuntu
             os_release: focal
             ros_distribution: galactic
             ros_version: 2
-          # Rolling Ridley  (June 2020 - Present)
+          # Humble Hawksbill
+          - os: ubuntu
+            os_release: focal
+            ros_distribution: humble
+            ros_version: 2
+          # Rolling Ridley
           - os: ubuntu
             os_release: focal
             ros_distribution: rolling
