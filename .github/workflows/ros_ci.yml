@@ -53,7 +53,7 @@ jobs:
         with:
           path: ros_ws/src
       - name: setup ROS environment
-        uses: ros-tooling/setup-ros@0.0.26
+        uses: ros-tooling/setup-ros@v0.3
         with:
           use-ros2-testing: false
           required-ros-distributions: ${{ matrix.ros_distribution }}
@@ -62,7 +62,7 @@ jobs:
       - name: install eCAL deb
         run: 'sudo dpkg -i ecal.deb'
       - name: build and test
-        uses: ros-tooling/action-ros-ci@0.1.0
+        uses: ros-tooling/action-ros-ci@v0.2
         with:
           package-name: rmw_ecal_dynamic_cpp
           target-ros2-distro: ${{ matrix.ros_distribution }}
