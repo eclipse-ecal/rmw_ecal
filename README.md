@@ -1,4 +1,5 @@
 # eCAL ROS2 middleware layer
+![Build](https://github.com/continental/rmw_ecal/actions/workflows/ros_ci.yml/badge.svg)
 
 ROS2 middleware based on eCAL.
 
