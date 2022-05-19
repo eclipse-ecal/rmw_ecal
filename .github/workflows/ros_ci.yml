@@ -7,7 +7,7 @@ on:
       - 'master'
 
 jobs:
-  test_environment:
+  build:
     runs-on: [ubuntu-latest]
     strategy:
       fail-fast: false
@@ -61,7 +61,7 @@ jobs:
         run: "rosdep update && rosdep install -r --from-paths ros_ws/src --ignore-src --rosdistro ${{ matrix.ros_distribution }} -y"
       - name: install eCAL deb
         run: 'sudo dpkg -i ecal.deb'
-      - name: build and test
+      - name: build
         uses: ros-tooling/action-ros-ci@v0.2
         with:
           package-name: rmw_ecal_dynamic_cpp
