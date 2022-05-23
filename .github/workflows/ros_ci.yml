@@ -47,7 +47,7 @@ jobs:
         run: |
           add-apt-repository ppa:ecal/ecal-latest \
           ; apt-get update \
-          ; apt-get install ecal \
+          ; apt-get install -y ecal \
       - name: setup directories
         run: mkdir -p ros_ws/src
       - name: checkout
