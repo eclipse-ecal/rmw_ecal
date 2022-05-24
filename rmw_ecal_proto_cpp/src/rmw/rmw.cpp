@@ -414,3 +414,8 @@ rmw_ret_t rmw_return_loaned_message_from_publisher(const rmw_publisher_t *publis
 {
   return eCAL::rmw::rmw_return_loaned_message_from_publisher(::rmw_get_implementation_identifier(), publisher, loaned_message);
 }
+
+rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw_time_t wait_timeout)
+{
+  return eCAL::rmw::rmw_publisher_wait_for_all_acked(publisher, wait_timeout);
+}

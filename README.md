@@ -85,6 +85,7 @@ Cons:
 
 * Foxy Fitzroy
 * Galactic Geochelone
+* Humble Hawksbill
 
 ## Legacy ROS2 distributions
 

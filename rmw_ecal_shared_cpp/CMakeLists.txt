@@ -63,6 +63,7 @@ add_library(${PROJECT_NAME} SHARED
 	src/init.cpp
 	src/qos_profiles.cpp
 	src/rmw.cpp
+	src/features.cpp
 )
 
 set(proto_files

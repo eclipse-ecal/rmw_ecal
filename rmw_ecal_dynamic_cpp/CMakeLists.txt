@@ -58,6 +58,7 @@ add_library(${PROJECT_NAME} SHARED
 	src/rmw/init.cpp
 	src/rmw/qos_profiles.cpp
 	src/rmw/rmw.cpp
+	src/rmw/features.cpp
 	src/serialization/serializer_cpp.cpp
 	src/serialization/serializer_c.cpp
 	src/serialization/deserializer_cpp.cpp

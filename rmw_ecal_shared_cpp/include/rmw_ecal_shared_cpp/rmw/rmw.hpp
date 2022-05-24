@@ -303,5 +303,8 @@ namespace eCAL
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
     rmw_ret_t rmw_return_loaned_message_from_publisher(const char *implementation_identifier, const rmw_publisher_t *publisher,
                                                        void *loaned_message);
+
+    RMW_PROTOBUF_SHARED_CPP_PUBLIC
+    rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw_time_t wait_timeout);
   } // namespace rmw
 } // namespace eCAL

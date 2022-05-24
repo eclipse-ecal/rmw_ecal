@@ -19,6 +19,7 @@
 set(supported_distros
 	foxy
 	galactic
+  humble
   rolling
 )
 

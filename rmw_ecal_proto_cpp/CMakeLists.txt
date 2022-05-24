@@ -54,7 +54,7 @@ include_directories(
 )
 
 add_library(${PROJECT_NAME} SHARED
-        src/rmw/event.cpp
+  src/rmw/event.cpp
 	src/rmw/get_network_flow_endpoints.cpp
 	src/rmw/get_node_info_and_types.cpp
 	src/rmw/get_service_names_and_types.cpp
@@ -64,6 +64,7 @@ add_library(${PROJECT_NAME} SHARED
 	src/rmw/init.cpp
 	src/rmw/qos_profiles.cpp
 	src/rmw/rmw.cpp
+	src/rmw/features.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 
