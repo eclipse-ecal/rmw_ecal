@@ -81,6 +81,15 @@ Cons:
 * A bit slower than rmw_ecal_dynamic_cpp
 * Not plug&play, requires [rosidl_typesupport_protobuf](https://github.com/continental/rosidl_typesupport_protobuf) to be built and sourced to work
 
+## Zero copy support
+[eCAL 5.10 introduced zero copy support for publishers](https://continental.github.io/ecal/advanced/layers/shm.html#zero-copy-mode-optional), it's currently disabled by default since it's still in experimental stage.
+You can enable it by adding this config to ecal.ini
+
+```ini
+[publisher]
+memfile_zero_copy = 1
+```
+
 ## Currently supported ROS2 distributions
 
 * Foxy Fitzroy
