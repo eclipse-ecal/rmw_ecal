@@ -327,10 +327,23 @@ namespace eCAL
                                  const rmw_subscription_t *subscription,
                                  void *ros_message,
                                  bool *taken,
-                                 rmw_message_info_t * /* message_info */,
-                                 rmw_subscription_allocation_t *allocation)
+                                 rmw_message_info_t *message_info,
+                                 rmw_subscription_allocation_t * /* allocation */)
     {
-      return rmw_take(implementation_identifier, subscription, ros_message, taken, allocation);
+      RMW_CHECK_ARGUMENT_FOR_NULL(subscription, RMW_RET_INVALID_ARGUMENT);
+      RMW_CHECK_ARGUMENT_FOR_NULL(ros_message, RMW_RET_INVALID_ARGUMENT);
+      RMW_CHECK_ARGUMENT_FOR_NULL(taken, RMW_RET_INVALID_ARGUMENT);
+      CHECK_RMW_IMPLEMENTATION(implementation_identifier, subscription);
+
+      auto ecal_sub = GetImplementation(subscription);
+      if (!ecal_sub->HasData())
+        return RMW_RET_OK;
+      auto ecal_msg_info = ecal_sub->TakeLatestDataWithInfo(ros_message);
+      message_info->source_timestamp = ecal_msg_info.send_timestamp;
+      message_info->received_timestamp = ecal_msg_info.receive_timestamp;
+      *taken = true;
+
+      return RMW_RET_OK;
     }
 
     rmw_ret_t rmw_take_sequence(const char *implementation_identifier,

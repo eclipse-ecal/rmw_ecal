@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <ecal/ecal_time.h>
 #include <string>
 #include <mutex>
 #include <queue>
@@ -39,11 +40,27 @@ namespace eCAL
     class Subscriber
     {
     public:
+      struct MessageInfo
+      {
+        MessageInfo(long long send_timestamp_,
+                    long long receive_timestamp_)
+          : send_timestamp{send_timestamp_},
+            receive_timestamp{receive_timestamp_} {}
+        long long send_timestamp;
+        long long receive_timestamp;
+      };
+
       struct Data
       {
-        Data(char *data_, size_t size_) : data(data_), size(size_) {}
+        Data(char *data_, size_t size_,
+             long long send_timestamp_,
+             long long receive_timestamp_)
+          : data{data_},
+            size{size_},
+            info{send_timestamp_, receive_timestamp_} {}
         char *data;
         size_t size;
+        MessageInfo info;
       };
 
     private:
@@ -62,8 +79,9 @@ namespace eCAL
 
       void OnReceiveData(const char * /* topic */, const eCAL::SReceiveCallbackData *data)
       {
+        auto receive_timestamp = eCAL::Time::GetNanoSeconds();
         auto latest_data = SaveData(data->buf, data->size);
-        EnqueueData(latest_data, data->size);
+        EnqueueData(latest_data, data->size, data->time, receive_timestamp);
         NotifyWaitSet();
       }
 
@@ -79,10 +97,10 @@ namespace eCAL
         return latest_data;
       }
 
-      void EnqueueData(char *data, size_t size)
+      void EnqueueData(char *data, size_t size, long long send_timestamp, long long recieve_timestamp)
       {
         std::lock_guard<std::mutex> queue_lock(queue_mutex_);
-        data_.emplace(data, size);
+        data_.emplace(data, size, send_timestamp, recieve_timestamp);
       }
 
       void NotifyWaitSet()
@@ -138,11 +156,18 @@ namespace eCAL
         subscriber_.AddEventCallback(eCAL_Subscriber_Event::sub_event_dropped, std::bind(&Subscriber::OnDataDropped, this, _1, _2));
       }
 
-      void TakeLatestData(void *data)
+
+      MessageInfo TakeLatestDataWithInfo(void *data)
       {
         auto latest_data = PopData();
         type_support_->Deserialize(data, latest_data.data, latest_data.size);
         delete[] latest_data.data;
+        return latest_data.info;
+      }
+
+      void TakeLatestData(void *data)
+      {
+        TakeLatestDataWithInfo(data);
       }
 
       Data TakeLatestSerializedData()
