@@ -306,5 +306,17 @@ namespace eCAL
 
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
     rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw_time_t wait_timeout);
+
+    RMW_PROTOBUF_SHARED_CPP_PUBLIC
+            rmw_subscription_set_content_filter(
+            rmw_subscription_t * subscription,
+        const rmw_subscription_content_filter_options_t * options)
+
+    RMW_PROTOBUF_SHARED_CPP_PUBLIC
+    rmw_subscription_get_content_filter(
+            const rmw_subscription_t * subscription,
+            rcutils_allocator_t * allocator,
+            rmw_subscription_content_filter_options_t * options)
+
   } // namespace rmw
 } // namespace eCAL
