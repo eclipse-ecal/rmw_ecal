@@ -310,13 +310,13 @@ namespace eCAL
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
             rmw_subscription_set_content_filter(
             rmw_subscription_t * subscription,
-        const rmw_subscription_content_filter_options_t * options)
+        const rmw_subscription_content_filter_options_t * options);
 
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
     rmw_subscription_get_content_filter(
             const rmw_subscription_t * subscription,
             rcutils_allocator_t * allocator,
-            rmw_subscription_content_filter_options_t * options)
+            rmw_subscription_content_filter_options_t * options);
 
   } // namespace rmw
 } // namespace eCAL
