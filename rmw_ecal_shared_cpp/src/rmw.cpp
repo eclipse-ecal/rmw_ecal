@@ -1060,14 +1060,16 @@ namespace eCAL
       UNSUPPORTED;
     }
 
+
+
     rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t * subscription, const rmw_subscription_content_filter_options_t * options)
     {
-      UNSUPPORTED;
+      UNSUPPORTED; // OK
     }
 
     rmw_ret_t rmw_subscription_get_content_filter(const rmw_subscription_t * subscription, rcutils_allocator_t * allocator, rmw_subscription_content_filter_options_t * options)
     {
-      UNSUPPORTED;
+      UNSUPPORTED; // OK
     }
 
 
@@ -1075,60 +1077,98 @@ namespace eCAL
 
     rmw_ret_t rmw_subscription_get_actual_qos(const rmw_subscription_t * subscription, rmw_qos_profile_t * qos)
     {
-      UNSUPPORTED;
+      //TODO
+      return RMW_RET_OK;
     }
 
     rmw_ret_t rmw_client_request_publisher_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos)
     {
-      UNSUPPORTED;
+      // TODO
+      return RMW_RET_OK;
     }
 
    rmw_ret_t rmw_client_response_subscription_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos)
    {
-      UNSUPPORTED;
+      UNSUPPORTED; // TODO
    }
 
    rmw_ret_t rmw_client_set_on_new_response_callback(rmw_client_t * rmw_client, rmw_event_callback_t callback, const void * user_data)
    {
-      UNSUPPORTED;
+      UNSUPPORTED; // OK
    }
 
    rmw_ret_t rmw_service_set_on_new_request_callback(rmw_service_t * rmw_service, rmw_event_callback_t callback, const void * user_data)
    {
-      UNSUPPORTED;
+      UNSUPPORTED; // OK
    }
 
 rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t * subscription, rmw_event_callback_t callback, const void * user_data)
 {
-      UNSUPPORTED;
+      UNSUPPORTED; // OK
 }
 
 
 
 bool rmw_feature_supported(rmw_feature_t feature)
 {
-  UNSUPPORTED;
+  UNSUPPORTED; // ?
 }
 
 rmw_ret_t rmw_event_set_callback(rmw_event_t * rmw_event, rmw_event_callback_t callback, const void * user_data)
 {
-  UNSUPPORTED;
+  UNSUPPORTED; // OK
 }
 
 rmw_ret_t rmw_service_request_subscription_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos)
 {
-      // RMW_CHECK_ARGUMENT_FOR_NULL(service, RMW_RET_INVALID_ARGUMENT);
-      // RMW_CHECK_ARGUMENT_FOR_NULL(qos, RMW_RET_INVALID_ARGUMENT);
-      // CHECK_RMW_IMPLEMENTATION(rmw_qos_profile_t, service);
+  // TODO
+  RMW_CHECK_ARGUMENT_FOR_NULL(service, RMW_RET_INVALID_ARGUMENT);
+  RMW_CHECK_TYPE_IDENTIFIERS_MATCH(
+    service,
+    service->implementation_identifier,
+    service->implementation_identifier,
+    return RMW_RET_INCORRECT_RMW_IMPLEMENTATION);
+  RMW_CHECK_ARGUMENT_FOR_NULL(qos, RMW_RET_INVALID_ARGUMENT);
 
-      // auto ecal_ = GetImplementation(service);
-      // *qos = ecal_sub->GetRosQOSProfile();
+  if (service->data == nullptr) {
+    RMW_SET_ERROR_MSG("service info is null");
+    return RMW_RET_ERROR;
+  }
 
-      return RMW_RET_OK;
+  // dds_DataReader * request_reader = service_info->request_reader;
+  // if (request_reader == nullptr) {
+  //   RMW_SET_ERROR_MSG("request reader is null");
+  //   return RMW_RET_ERROR;
+  // }
+
+  // dds_DataReaderQos dds_qos;
+  // dds_ReturnCode_t ret = dds_DataReader_get_qos(request_reader, &dds_qos);
+  // if (ret != dds_RETCODE_OK) {
+  //   RMW_SET_ERROR_MSG("subscription can't get data reader qos policies");
+  //   return RMW_RET_ERROR;
+  // }
+
+  // qos->reliability = convert_reliability(&dds_qos.reliability);
+  // qos->durability = convert_durability(&dds_qos.durability);
+  // qos->deadline = convert_deadline(&dds_qos.deadline);
+  // qos->liveliness = convert_liveliness(&dds_qos.liveliness);
+  // qos->liveliness_lease_duration = convert_liveliness_lease_duration(&dds_qos.liveliness);
+  // qos->history = convert_history(&dds_qos.history);
+  // qos->depth = static_cast<size_t>(dds_qos.history.depth);
+
+  // ret = dds_DataReaderQos_finalize(&dds_qos);
+  // if (ret != dds_RETCODE_OK) {
+  //   RMW_SET_ERROR_MSG("failed to finalize datareader qos");
+  //   return RMW_RET_ERROR;
+  // }
+
+  return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_service_response_publisher_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos){
-  UNSUPPORTED;
+   // TODO
+
+   return RMW_RET_OK;
 }
 
 
