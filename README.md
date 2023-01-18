@@ -11,6 +11,19 @@ eCAL RMW can offer:
 * Support for [eCAL](https://github.com/eclipse-ecal/ecal) ecosystem powerful tools like eCAL recorder, eCAL player, eCAL monitor, which can be used to record, replay and monitor RMW layer
 * Communication between ROS2 nodes and eCAL tasks without need for a gateway
 
+## rmw_ecal is looking for a maintainer
+
+We (the [Eclipse eCAL Team](https://projects.eclipse.org/projects/automotive.ecal/who)) have reached our maximum capacity. Therefore, we currently cannot support this project as well as we would like to and **need your help**! 🫵
+
+You can help by:
+- Testing it with the latest ROS versions
+- Creating Pull requests
+- Answering other users' questions
+
+If you would like to actively maintain this project, feel free to contact us 😊
+
+_We are not abandoning this project and are happy to help and resolve any eCAL related issues._
+
 ## Build instructions
 
 * Install [eCAL](https://eclipse-ecal.github.io/ecal/getting_started/setup.html)
