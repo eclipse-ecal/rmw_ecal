@@ -13,7 +13,11 @@
 // limitations under the License.
 
 #include <rmw/rmw.h>
-#include "rmw/features.h"
+
+#if ROS_DISTRO >= GALACTIC
+    #include "rmw/features.h"
+#endif
+
 
 
 #include <rmw_ecal_shared_cpp/typesupport_factory.hpp>
