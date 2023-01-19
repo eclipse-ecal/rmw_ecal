@@ -14,7 +14,7 @@
 
 #include <rmw/rmw.h>
 
-#if ROS_DISTRO >= HUMBLE
+#if ROS_DISTRO == HUMBLE
     #include "rmw/features.h"
 #endif
 
@@ -313,7 +313,13 @@ namespace eCAL
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
     rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw_time_t wait_timeout);
 
+
  // required functions for HUMBLE
+#if ROS_DISTRO == HUMBLE
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        bool rmw_feature_supported(rmw_feature_t feature);
+#endif
+
 #if ROS_DISTRO >= HUMBLE
         RMW_PROTOBUF_SHARED_CPP_PUBLIC
         rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t *subscription, const rmw_subscription_content_filter_options_t * options);
@@ -338,9 +344,6 @@ namespace eCAL
 
         RMW_PROTOBUF_SHARED_CPP_PUBLIC
         rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t * subscription, rmw_event_callback_t callback, const void * user_data);
-
-        RMW_PROTOBUF_SHARED_CPP_PUBLIC
-        bool rmw_feature_supported(rmw_feature_t feature);
 
         RMW_PROTOBUF_SHARED_CPP_PUBLIC
         rmw_ret_t rmw_event_set_callback(rmw_event_t * rmw_event, rmw_event_callback_t callback, const void * user_data);

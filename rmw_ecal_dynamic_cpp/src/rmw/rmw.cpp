@@ -394,6 +394,13 @@ rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw
 
 
 // required functions for HUMBLE
+#if ROS_DISTRO == HUMBLE
+
+bool rmw_feature_supported(rmw_feature_t feature) {
+    return eCAL::rmw::rmw_feature_supported(feature);
+}
+#endif
+
 #if ROS_DISTRO >= HUMBLE
 
 rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t *subscription,
@@ -434,10 +441,6 @@ rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t *subsc
     return eCAL::rmw::rmw_subscription_set_on_new_message_callback(subscription, callback, user_data);
 }
 
-
-bool rmw_feature_supported(rmw_feature_t feature) {
-    return eCAL::rmw::rmw_feature_supported(feature);
-}
 
 rmw_ret_t rmw_event_set_callback(rmw_event_t *rmw_event, rmw_event_callback_t callback, const void *user_data) {
     return eCAL::rmw::rmw_event_set_callback(rmw_event, callback, user_data);

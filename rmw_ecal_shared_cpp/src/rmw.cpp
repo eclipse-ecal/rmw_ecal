@@ -977,8 +977,14 @@ namespace eCAL {
             UNSUPPORTED;
         }
 
-
 // required functions for HUMBLE
+#if ROS_DISTRO == HUMBLE
+
+        bool rmw_feature_supported(rmw_feature_t feature) {
+            UNSUPPORTED; // ?
+        }
+#endif
+
 #if ROS_DISTRO >= HUMBLE
 
         rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t *subscription,
@@ -1023,10 +1029,6 @@ namespace eCAL {
             UNSUPPORTED; // OK
         }
 
-
-        bool rmw_feature_supported(rmw_feature_t feature) {
-            UNSUPPORTED; // ?
-        }
 
         rmw_ret_t rmw_event_set_callback(rmw_event_t *rmw_event, rmw_event_callback_t callback, const void *user_data) {
             UNSUPPORTED; // OK
