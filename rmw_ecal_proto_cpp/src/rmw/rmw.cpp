@@ -396,13 +396,11 @@ rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw
 // required functions for HUMBLE
 
 #if ROS_DISTRO == HUMBLE
+
 bool rmw_feature_supported(rmw_feature_t feature) {
     return eCAL::rmw::rmw_feature_supported(feature);
 }
-#endif
 
-
-#if ROS_DISTRO >= HUMBLE
 
 rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t *subscription,
                                               const rmw_subscription_content_filter_options_t *options) {

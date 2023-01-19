@@ -983,9 +983,7 @@ namespace eCAL {
         bool rmw_feature_supported(rmw_feature_t feature) {
             UNSUPPORTED; // ?
         }
-#endif
 
-#if ROS_DISTRO >= HUMBLE
 
         rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t *subscription,
                                                       const rmw_subscription_content_filter_options_t *options) {
