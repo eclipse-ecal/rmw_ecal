@@ -14,7 +14,7 @@
 
 #include <rmw/rmw.h>
 
-#if ROS_DISTRO >= GALACTIC
+#if ROS_DISTRO >= HUMBLE
     #include "rmw/features.h"
 #endif
 
