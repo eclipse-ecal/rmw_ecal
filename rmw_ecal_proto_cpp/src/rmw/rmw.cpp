@@ -430,38 +430,30 @@ rmw_ret_t rmw_subscription_get_content_filter(const rmw_subscription_t *subscrip
     return eCAL::rmw::rmw_subscription_get_content_filter(subscription,allocator,options);
 }
 
+rmw_ret_t rmw_client_request_publisher_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos)
+{
+return eCAL::rmw::rmw_client_request_publisher_get_actual_qos(client,qos);
+}
 
+rmw_ret_t rmw_client_response_subscription_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos)
+{
+return eCAL::rmw::rmw_client_response_subscription_get_actual_qos(client,qos);
+}
 
+rmw_ret_t rmw_client_set_on_new_response_callback(rmw_client_t * rmw_client, rmw_event_callback_t callback, const void * user_data)
+{
+return eCAL::rmw::rmw_client_set_on_new_response_callback(rmw_client,callback,user_data);
+}
 
-    rmw_ret_t rmw_client_request_publisher_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos)
-    {
-    return eCAL::rmw::rmw_client_request_publisher_get_actual_qos(client,qos);
-    }
-
-
-   rmw_ret_t rmw_client_response_subscription_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos)
-   {
-    return eCAL::rmw::rmw_client_response_subscription_get_actual_qos(client,qos);
-   }
-
-
-   rmw_ret_t rmw_client_set_on_new_response_callback(rmw_client_t * rmw_client, rmw_event_callback_t callback, const void * user_data)
-   {
-    return eCAL::rmw::rmw_client_set_on_new_response_callback(rmw_client,callback,user_data);
-   }
-
-
-   rmw_ret_t rmw_service_set_on_new_request_callback(rmw_service_t * rmw_service, rmw_event_callback_t callback, const void * user_data)
-   {
-    return eCAL::rmw::rmw_service_set_on_new_request_callback(rmw_service,callback,user_data);
-   }
-
+rmw_ret_t rmw_service_set_on_new_request_callback(rmw_service_t * rmw_service, rmw_event_callback_t callback, const void * user_data)
+{
+return eCAL::rmw::rmw_service_set_on_new_request_callback(rmw_service,callback,user_data);
+}
 
 rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t * subscription, rmw_event_callback_t callback, const void * user_data)
 {
     return eCAL::rmw::rmw_subscription_set_on_new_message_callback(subscription,callback,user_data);
 }
-
 
 rmw_ret_t rmw_event_set_callback(rmw_event_t *rmw_event, rmw_event_callback_t callback, const void *user_data)
 {

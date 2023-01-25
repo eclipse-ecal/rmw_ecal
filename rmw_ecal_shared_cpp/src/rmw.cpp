@@ -1063,9 +1063,10 @@ namespace eCAL
 // required functions for HUMBLE
 #if ROS_DISTRO == HUMBLE
 
-        bool rmw_feature_supported(rmw_feature_t feature) {
-            UNSUPPORTED; // ?
-        }
+    bool rmw_feature_supported(rmw_feature_t feature)
+    {
+        UNSUPPORTED; // ?
+    }
 
     rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t * subscription, const rmw_subscription_content_filter_options_t * options)
     {
@@ -1076,9 +1077,6 @@ namespace eCAL
     {
       UNSUPPORTED; // OK
     }
-
-
-
 
     rmw_ret_t rmw_subscription_get_actual_qos(const rmw_subscription_t * subscription, rmw_qos_profile_t * qos)
     {
@@ -1107,48 +1105,48 @@ namespace eCAL
       UNSUPPORTED; // OK
    }
 
-rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t * subscription, rmw_event_callback_t callback, const void * user_data)
-{
+    rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t * subscription, rmw_event_callback_t callback, const void * user_data)
+    {
+          UNSUPPORTED; // OK
+    }
+
+
+
+    bool rmw_feature_supported(rmw_feature_t feature)
+    {
+      UNSUPPORTED; // ?
+    }
+
+    rmw_ret_t rmw_event_set_callback(rmw_event_t * rmw_event, rmw_event_callback_t callback, const void * user_data)
+    {
       UNSUPPORTED; // OK
-}
+    }
+
+    rmw_ret_t rmw_service_request_subscription_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos)
+    {
+      // TODO
+      RMW_CHECK_ARGUMENT_FOR_NULL(service, RMW_RET_INVALID_ARGUMENT);
+      RMW_CHECK_TYPE_IDENTIFIERS_MATCH(
+        service,
+        service->implementation_identifier,
+        service->implementation_identifier,
+        return RMW_RET_INCORRECT_RMW_IMPLEMENTATION);
+      RMW_CHECK_ARGUMENT_FOR_NULL(qos, RMW_RET_INVALID_ARGUMENT);
+
+      if (service->data == nullptr) {
+        RMW_SET_ERROR_MSG("service info is null");
+        return RMW_RET_ERROR;
+      }
 
 
+      return RMW_RET_OK;
+    }
 
-bool rmw_feature_supported(rmw_feature_t feature)
-{
-  UNSUPPORTED; // ?
-}
+    rmw_ret_t rmw_service_response_publisher_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos){
+       // TODO
 
-rmw_ret_t rmw_event_set_callback(rmw_event_t * rmw_event, rmw_event_callback_t callback, const void * user_data)
-{
-  UNSUPPORTED; // OK
-}
-
-rmw_ret_t rmw_service_request_subscription_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos)
-{
-  // TODO
-  RMW_CHECK_ARGUMENT_FOR_NULL(service, RMW_RET_INVALID_ARGUMENT);
-  RMW_CHECK_TYPE_IDENTIFIERS_MATCH(
-    service,
-    service->implementation_identifier,
-    service->implementation_identifier,
-    return RMW_RET_INCORRECT_RMW_IMPLEMENTATION);
-  RMW_CHECK_ARGUMENT_FOR_NULL(qos, RMW_RET_INVALID_ARGUMENT);
-
-  if (service->data == nullptr) {
-    RMW_SET_ERROR_MSG("service info is null");
-    return RMW_RET_ERROR;
-  }
-
-
-  return RMW_RET_OK;
-}
-
-rmw_ret_t rmw_service_response_publisher_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos){
-   // TODO
-
-   return RMW_RET_OK;
-}
+       return RMW_RET_OK;
+    }
 
 #endif
 
