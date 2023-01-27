@@ -14,6 +14,12 @@
 
 #include <rmw/rmw.h>
 
+#if ROS_DISTRO == HUMBLE
+    #include "rmw/features.h"
+#endif
+
+
+
 #include <rmw_ecal_shared_cpp/typesupport_factory.hpp>
 #include <rmw_ecal_shared_cpp/serializer_factory.hpp>
 #include <rmw_ecal_shared_cpp/visibility.h>
@@ -306,5 +312,49 @@ namespace eCAL
 
     RMW_PROTOBUF_SHARED_CPP_PUBLIC
     rmw_ret_t rmw_publisher_wait_for_all_acked(const rmw_publisher_t *publisher, rmw_time_t wait_timeout);
+
+
+ // required functions for HUMBLE
+#if ROS_DISTRO == HUMBLE
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        bool rmw_feature_supported(rmw_feature_t feature);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_subscription_set_content_filter(rmw_subscription_t *subscription, const rmw_subscription_content_filter_options_t * options);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_subscription_get_content_filter(const rmw_subscription_t *subscription, rcutils_allocator_t * allocator, rmw_subscription_content_filter_options_t * options);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_subscription_get_actual_qos(const rmw_subscription_t * subscription, rmw_qos_profile_t * qos);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_client_request_publisher_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_client_response_subscription_get_actual_qos(const rmw_client_t * client, rmw_qos_profile_t * qos);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_client_set_on_new_response_callback(rmw_client_t * rmw_client, rmw_event_callback_t callback, const void * user_data);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_service_set_on_new_request_callback(rmw_service_t * rmw_service, rmw_event_callback_t callback, const void * user_data);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_subscription_set_on_new_message_callback(rmw_subscription_t * subscription, rmw_event_callback_t callback, const void * user_data);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_event_set_callback(rmw_event_t * rmw_event, rmw_event_callback_t callback, const void * user_data);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_service_request_subscription_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos);
+
+        RMW_PROTOBUF_SHARED_CPP_PUBLIC
+        rmw_ret_t rmw_service_response_publisher_get_actual_qos(const rmw_service_t * service, rmw_qos_profile_t * qos);
+#endif
+
+
+
+
   } // namespace rmw
 } // namespace eCAL
