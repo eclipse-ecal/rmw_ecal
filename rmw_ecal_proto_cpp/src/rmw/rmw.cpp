@@ -470,4 +470,3 @@ rmw_ret_t rmw_service_response_publisher_get_actual_qos(const rmw_service_t *ser
     return eCAL::rmw::rmw_service_response_publisher_get_actual_qos(service, qos);
 }
 
-#endif
