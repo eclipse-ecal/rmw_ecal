@@ -54,7 +54,14 @@ namespace eCAL
 
     inline std::string BuildQueryServiceName(const std::string &namespace_, const std::string &name)
     {
-      return node_query_service_prefix + namespace_ + name;
+      if (namespace_ == "/") {
+        std::string service_name = node_query_service_prefix + namespace_ + name;
+        return service_name;       
+      }
+      else {
+        std::string service_name = node_query_service_prefix + namespace_ + '/' + name;
+        return service_name;
+      }      
     }
 
     inline int ToECalDepth(size_t depth)
