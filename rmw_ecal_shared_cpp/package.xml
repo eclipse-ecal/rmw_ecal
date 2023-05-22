@@ -9,7 +9,6 @@
 
  	<build_depend>rmw</build_depend>
   <build_depend>protobuf-dev</build_depend>
-	<build_depend>eCAL</build_depend>
 
 	<depend>rmw_implementation_cmake</depend>
 	<depend>rosidl_generator_c</depend>
