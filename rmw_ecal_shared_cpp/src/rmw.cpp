@@ -339,8 +339,13 @@ namespace eCAL
       if (!ecal_sub->HasData())
         return RMW_RET_OK;
       auto ecal_msg_info = ecal_sub->TakeLatestDataWithInfo(ros_message);
-      message_info->source_timestamp = ecal_msg_info.send_timestamp;
-      message_info->received_timestamp = ecal_msg_info.receive_timestamp;
+      // eCAL timestamps are in microseconds but ROS expects them in nanoseconds
+      std::chrono::microseconds src_ts_ms{ecal_msg_info.send_timestamp};
+      std::chrono::microseconds rcv_ts_ms{ecal_msg_info.receive_timestamp};
+      message_info->source_timestamp =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(src_ts_ms).count();
+      message_info->received_timestamp =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(rcv_ts_ms).count();
       *taken = true;
 
       return RMW_RET_OK;

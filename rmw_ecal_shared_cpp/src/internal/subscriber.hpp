@@ -79,7 +79,7 @@ namespace eCAL
 
       void OnReceiveData(const char * /* topic */, const eCAL::SReceiveCallbackData *data)
       {
-        auto receive_timestamp = eCAL::Time::GetNanoSeconds();
+        auto receive_timestamp = eCAL::Time::GetMicroSeconds();
         auto latest_data = SaveData(data->buf, data->size);
         EnqueueData(latest_data, data->size, data->time, receive_timestamp);
         NotifyWaitSet();
