@@ -26,6 +26,8 @@ set(supported_distros
 list(FIND supported_distros $ENV{ROS_DISTRO} index)
 if(index EQUAL -1)
   message(FATAL_ERROR "'$ENV{ROS_DISTRO}' is an unsupported ros2 distro.")
+else()  
+  add_compile_definitions("ROS_DISTRO=${index}")
 endif()
 
 set(distro_index 0)
@@ -34,4 +36,3 @@ foreach(distro ${supported_distros})
   MATH(EXPR distro_index "${distro_index}+1")
 endforeach()
 
-add_compile_definitions("ROS_DISTRO=$<UPPER_CASE:$ENV{ROS_DISTRO}>")

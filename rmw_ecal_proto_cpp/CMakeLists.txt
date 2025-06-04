@@ -64,7 +64,6 @@ add_library(${PROJECT_NAME} SHARED
 	src/rmw/init.cpp
 	src/rmw/qos_profiles.cpp
 	src/rmw/rmw.cpp
-	src/rmw/features.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 
